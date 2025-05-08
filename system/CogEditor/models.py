@@ -6,7 +6,10 @@ from django.utils import timezone
 
 class StructuralUnit(models.Model):
     """Структурное подразделение"""
-    unit = models.CharField(max_length=128)
+    unit = models.CharField(
+        max_length=128,
+        verbose_name="Наименование структурного подразделения"
+    )
 
     def __str__(self):
         return f'<StructuralUnit: {self.unit}>'
@@ -22,7 +25,10 @@ class StructuralUnit(models.Model):
 
 class EmployeePosition(models.Model):
     """Должность сотрудника"""
-    position = models.CharField(max_length=32)
+    position = models.CharField(
+        max_length=32,
+        verbose_name="Наименование должности",
+    )
 
     def __str__(self):
         return f'<EmployeePosition: {self.position}>'
@@ -38,16 +44,21 @@ class EmployeePosition(models.Model):
 
 class Employee(models.Model):
     """Сотрудник ДВФУ"""
-    full_name = models.CharField(max_length=64)
+    full_name = models.CharField(
+        max_length=64,
+        verbose_name="ФИО сотрудника",
+    )
 
     position = models.ForeignKey(
         EmployeePosition,
         on_delete=models.CASCADE,
+        verbose_name="Должность сотрудника",
     )
 
     structural_unit = models.ForeignKey(
         StructuralUnit,
         on_delete=models.CASCADE,
+        verbose_name="Структурное подразделение",
     )
 
     def __str__(self):
@@ -64,8 +75,15 @@ class Employee(models.Model):
 
 class ParticipatoryRole(models.Model):
     """Роль участников мероприятия"""
-    role = models.CharField(max_length=64)
-    description = models.CharField(max_length=512)
+    role = models.CharField(
+        max_length=64,
+        verbose_name="Роль участника мероприятия",
+        default="Некоторая роль",
+    )
+    description = models.TextField(
+        max_length=512,
+        verbose_name="Описание роли участника",
+    )
 
     def __str__(self):
         return f'<ParticipatoryRole: {self.role}>'
@@ -81,8 +99,14 @@ class ParticipatoryRole(models.Model):
 
 class AgreedStatus(models.Model):
     """Статусы согласования мероприятий"""
-    status = models.CharField(max_length=32)
-    description = models.CharField(max_length=512)
+    status = models.CharField(
+        max_length=32,
+        verbose_name="Наименование статуса согласования",
+    )
+    description = models.TextField(
+        max_length=512,
+        verbose_name="Описание статуса согласования",
+    )
 
     def __str__(self):
         return f'<AgreedStatus: {self.status}>'
@@ -99,28 +123,55 @@ class AgreedStatus(models.Model):
 class Application(models.Model):
     """Заявка на мероприятие"""
 
-    subm_date = models.DateTimeField("submission date")
+    subm_date = models.DateTimeField(
+        blank=False,
+        verbose_name="Время регистрации заявки",
+        auto_now_add=True,
+    )
 
-    e_title = models.CharField(max_length=256)
-    e_description = models.CharField(max_length=512)
+    e_title = models.TextField(
+        max_length=256,
+        verbose_name="Наименование мероприятия",
+        default="Некоторое наименование мероприятия",
+    )
+    e_description = models.TextField(
+        max_length=512,
+        verbose_name="Описание мероприятия",
+        default="Некоторое описание мероприятия",
+    )
 
-    e_start_time = models.DateTimeField("Event start time")
-    e_end_time = models.DateTimeField("Event end time")
+    e_start_time = models.DateTimeField(
+        verbose_name="Дата и время начала мероприятия",
+    )
 
-    number_of_participants = models.IntegerField()
+    e_end_time = models.DateTimeField(
+        verbose_name="Дата и время окончания мероприятия",
+    )
+
+    number_of_participants = models.IntegerField(
+        verbose_name="Количество участников мероприятия",
+        default=25,
+    )
+
     role = models.ForeignKey(
         ParticipatoryRole,
         on_delete=models.CASCADE,
+        verbose_name="Роль участника мероприятия",
+        default=0,
+
     )
 
     organizer = models.ForeignKey(
         Employee,
         on_delete=models.CASCADE,
+        verbose_name="Организатор мероприятия",
     )
 
     status = models.ForeignKey(
         AgreedStatus,
         on_delete=models.CASCADE,
+        verbose_name="Статус согласования мероприятия",
+
     )
 
     def __str__(self):
