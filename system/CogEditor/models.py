@@ -121,7 +121,7 @@ class AgreedStatus(models.Model):
 
         verbose_name = 'статус согласования'
         verbose_name_plural = 'Статусы согласования'
-        ordering = ['n_stage']
+        ordering = ['n_stage', ]
 
 
 class Application(models.Model):
@@ -157,11 +157,9 @@ class Application(models.Model):
         default=25,
     )
 
-    role = models.ForeignKey(
+    roles = models.ManyToManyField(
         ParticipatoryRole,
-        on_delete=models.CASCADE,
         verbose_name="Роль участника мероприятия",
-        default=0,
     )
 
     organizer = models.ForeignKey(
