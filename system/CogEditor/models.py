@@ -11,6 +11,14 @@ class StructuralUnit(models.Model):
     def __str__(self):
         return f'<StructuralUnit: {self.unit}>'
 
+    class Meta:
+        """Зарещенный на територии РФ класс, \
+        описывающий наименование структурного подразделения на Рус. яз."""
+
+        verbose_name = 'структурное подразделение'
+        verbose_name_plural = 'Структурные подразделения'
+        ordering = ['unit']
+
 
 class EmployeePosition(models.Model):
     """Должность сотрудника"""
@@ -18,6 +26,14 @@ class EmployeePosition(models.Model):
 
     def __str__(self):
         return f'<EmployeePosition: {self.position}>'
+
+    class Meta:
+        """Зарещенный на територии РФ класс, \
+        описывающий наименование должностей сотрудников на Рус. яз."""
+
+        verbose_name = 'должность'
+        verbose_name_plural = 'Должности'
+        ordering = ['position']
 
 
 class Employee(models.Model):
@@ -36,6 +52,14 @@ class Employee(models.Model):
 
     def __str__(self):
         return f'<Employee: {self.full_name}>'
+
+    class Meta:
+        """Зарещенный на територии РФ класс, \
+        описывающий сотрудников ДВФУ на Рус. яз."""
+
+        verbose_name = 'сотрудник'
+        verbose_name_plural = 'Сотрудники'
+        ordering = ['full_name']
 
 
 class ParticipatoryRole(models.Model):
@@ -88,3 +112,11 @@ class Application(models.Model):
 
     def will_soon(self):
         return self.subm_date >= timezone.now() + datetime.timedelta(days=3)
+
+    class Meta:
+        """Зарещенный на територии РФ класс, \
+        описывающий заявки на мероприятия на Рус. яз."""
+
+        verbose_name = 'заявка'
+        verbose_name_plural = 'Заявки'
+        ordering = ['subm_date']
