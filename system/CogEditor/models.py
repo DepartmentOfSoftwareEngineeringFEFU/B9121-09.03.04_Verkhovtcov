@@ -47,18 +47,6 @@ class ParticipatoryRole(models.Model):
         return f'<ParticipatoryRole: {self.role}>'
 
 
-class Contingent(models.Model):
-    """Контингент мероприятия"""
-    number_of_participants = models.IntegerField()
-    role = models.ForeignKey(
-        ParticipatoryRole,
-        on_delete=models.CASCADE,
-    )
-
-    def __str__(self):
-        return f'<Contingent: {self.number_of_participants}, {self.role}>'
-
-
 class AgreedStatus(models.Model):
     """Статусы согласования мероприятий"""
     status = models.CharField(max_length=32)
@@ -78,6 +66,12 @@ class Application(models.Model):
 
     e_start_time = models.DateTimeField("Event start time")
     e_end_time = models.DateTimeField("Event end time")
+
+    number_of_participants = models.IntegerField()
+    role = models.ForeignKey(
+        ParticipatoryRole,
+        on_delete=models.CASCADE,
+    )
 
     organizer = models.ForeignKey(
         Employee,
