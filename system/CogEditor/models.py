@@ -70,6 +70,14 @@ class ParticipatoryRole(models.Model):
     def __str__(self):
         return f'<ParticipatoryRole: {self.role}>'
 
+    class Meta:
+        """Зарещенный на територии РФ класс, \
+        описывающий роли участников мероприятий на Рус. яз."""
+
+        verbose_name = 'роль участника'
+        verbose_name_plural = 'Роли участников'
+        ordering = ['role']
+
 
 class AgreedStatus(models.Model):
     """Статусы согласования мероприятий"""
@@ -78,6 +86,14 @@ class AgreedStatus(models.Model):
 
     def __str__(self):
         return f'<AgreedStatus: {self.status}>'
+
+    class Meta:
+        """Зарещенный на територии РФ класс, \
+        описывающий статусы согласования заявок на Рус. яз."""
+
+        verbose_name = 'статус согласования'
+        verbose_name_plural = 'Статусы согласования'
+        ordering = ['status']
 
 
 class Application(models.Model):
