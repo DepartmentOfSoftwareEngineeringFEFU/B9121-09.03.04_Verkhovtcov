@@ -1,4 +1,7 @@
+import datetime
+
 from django.db import models
+from django.utils import timezone
 
 
 class StructuralUnit(models.Model):
@@ -88,3 +91,6 @@ class Application(models.Model):
 
     def __str__(self):
         return f'<Application: {self.e_title}>'
+
+    def will_soon(self):
+        return self.subm_date >= timezone.now() + datetime.timedelta(days=3)
