@@ -12,7 +12,7 @@ class StructuralUnit(models.Model):
     )
 
     def __str__(self):
-        return f'<StructuralUnit: {self.unit}>'
+        return self.unit
 
     class Meta:
         """Зарещенный на територии РФ класс, \
@@ -62,7 +62,7 @@ class Employee(models.Model):
     )
 
     def __str__(self):
-        return f'<Employee: {self.full_name}>'
+        return self.full_name
 
     class Meta:
         """Зарещенный на територии РФ класс, \
@@ -86,7 +86,7 @@ class ParticipatoryRole(models.Model):
     )
 
     def __str__(self):
-        return f'<ParticipatoryRole: {self.role}>'
+        return self.role
 
     class Meta:
         """Зарещенный на територии РФ класс, \
@@ -107,9 +107,13 @@ class AgreedStatus(models.Model):
         max_length=512,
         verbose_name="Описание статуса согласования",
     )
+    n_stage = models.IntegerField(
+        default=7,
+        verbose_name="Номер этапа согласования",
+    )
 
     def __str__(self):
-        return f'<AgreedStatus: {self.status}>'
+        return f"{self.n_stage}. {self.status}"
 
     class Meta:
         """Зарещенный на територии РФ класс, \
@@ -117,7 +121,7 @@ class AgreedStatus(models.Model):
 
         verbose_name = 'статус согласования'
         verbose_name_plural = 'Статусы согласования'
-        ordering = ['status']
+        ordering = ['n_stage']
 
 
 class Application(models.Model):
@@ -158,7 +162,6 @@ class Application(models.Model):
         on_delete=models.CASCADE,
         verbose_name="Роль участника мероприятия",
         default=0,
-
     )
 
     organizer = models.ForeignKey(
@@ -171,11 +174,10 @@ class Application(models.Model):
         AgreedStatus,
         on_delete=models.CASCADE,
         verbose_name="Статус согласования мероприятия",
-
     )
 
     def __str__(self):
-        return f'<Application: {self.e_title}>'
+        return self.e_title
 
     def will_soon(self):
         return self.subm_date >= timezone.now() + datetime.timedelta(days=3)
