@@ -177,7 +177,7 @@ class Application(models.Model):
     )
 
     def __str__(self):
-        return self.e_title
+        return f"{self.subm_date.strftime('%Y.%m.%d')} - {self.e_title}"
 
     def will_soon(self):
         return self.subm_date >= timezone.now() + datetime.timedelta(days=3)
