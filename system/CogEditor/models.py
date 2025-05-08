@@ -31,7 +31,7 @@ class EmployeePosition(models.Model):
     )
 
     def __str__(self):
-        return f'<EmployeePosition: {self.position}>'
+        return self.position
 
     class Meta:
         """Зарещенный на територии РФ класс, \
