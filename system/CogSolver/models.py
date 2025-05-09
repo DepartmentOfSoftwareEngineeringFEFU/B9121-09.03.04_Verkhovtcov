@@ -17,12 +17,6 @@ logging.critical("A message of CRITICAL severity")
 logging.basicConfig(level=logging.DEBUG, filename="py_log.log", filemode="w",
                     format="%(asctime)s %(levelname)s %(message)s")
 
-logging.debug("A DEBUG Message")
-logging.info("An INFO")
-logging.warning("A WARNING")
-logging.error("An ERROR")
-logging.critical("A message of CRITICAL severity")
-
 
 class Rule(models.Model):
     name = models.CharField(
@@ -96,13 +90,12 @@ class Rule(models.Model):
         try:
             if self.condition_type == "date_compare":
                 logger.debug(f"{self.days_threshold=}")
-                logger.debug(f"{self.days_threshold=}")
                 if self.days_threshold is None:
                     return False
                 return (
                     application.subm_date
-                    > application.e_start_time
                     + datetime.timedelta(days=self.days_threshold)
+                    >= application.e_start_time
                 )
 
             elif self.condition_type == "role_check":
@@ -149,7 +142,7 @@ class Rule(models.Model):
             raise ValidationError(
                 "Для сравнения дат необходимо указать порог дней"
             )
-            
+
         if self.condition_type == "role_check" and self.role_id is None:
             logging.error("ValidationError", exc_info=True)
             logging.error("ValidationError", exc_info=True)
