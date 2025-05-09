@@ -22,4 +22,4 @@ def index(request):
 
 def rules_report(request):
     results = RuleEngine.batch_apply_rules()
-    return render(request, 'rules/report.html', {'results': results})
+    return render(request, 'CogSolver/index.html', {'results': results})

@@ -28,7 +28,7 @@ class RuleAdmin(admin.ModelAdmin):
             raise ValueError("Для сравнения дат необходимо указать порог дней")
         super().save_model(request, obj, form, change)
 
-    change_list_template = 'admin/rules/rule/change_list.html'
+    change_list_template = 'CogSolver/admin/change_list.html'
 
     def get_urls(self):
         urls = super().get_urls()
