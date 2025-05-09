@@ -9,6 +9,9 @@ def index(request):
         'columns': [
             {'name': 'ID', 'key': 'application.id'},
             {'name': 'Название', 'key': 'application.e_title'},
+            {'name': 'Дата подачи заявки', 'key': 'application.subm_date'},
+            {'name': 'Дата проведения мероприятия',
+             'key': 'application.e_start_time'},
             {'name': 'Текущий статус', 'key': 'current_status'},
             {'name': 'Новый статус', 'key': 'new_status'},
             {'name': 'Изменен?', 'key': 'status_changed'},
