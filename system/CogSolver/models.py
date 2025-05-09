@@ -138,7 +138,6 @@ class Rule(models.Model):
             raise ValidationError(
                 "Для сравнения дат необходимо указать порог дней"
             )
-
         if self.condition_type == "role_check" and self.role_id is None:
             logging.error("ValidationError", exc_info=True)
             raise ValidationError(
