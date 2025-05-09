@@ -2,10 +2,11 @@ from CogSolver.models import RuleEngine
 from django.shortcuts import render
 
 
-def index(request):
-    results = RuleEngine.batch_apply_rules()
+def rules_report(request):
+    raw_results = RuleEngine.batch_apply_rules()
+
     context = {
-        'results': results,
+        'results': raw_results,
         'columns': [
             {'name': 'ID', 'key': 'application.id'},
             {'name': 'Название', 'key': 'application.e_title'},
@@ -18,8 +19,3 @@ def index(request):
         ]
     }
     return render(request, 'CogSolver/index.html', context)
-
-
-def rules_report(request):
-    results = RuleEngine.batch_apply_rules()
-    return render(request, 'CogSolver/index.html', {'results': results})
