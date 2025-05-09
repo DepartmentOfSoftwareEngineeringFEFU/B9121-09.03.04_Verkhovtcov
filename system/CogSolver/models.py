@@ -85,34 +85,37 @@ class Rule(models.Model):
                     return False
                 return (
                     application.subm_date
-                    > application.e_start_time
                     + datetime.timedelta(days=self.days_threshold)
+                    >= application.e_start_time
                 )
 
             elif self.condition_type == "role_check":
-                if self.role_id is None:
+                if not self.role_id.exists():
                     return False
-                return application.roles.filter(id=self.role_id).exists()
+                role_ids = self.role_id.values_list("id", flat=True)
+                return application.roles.filter(id__in=role_ids).exists()
 
             elif self.condition_type == "text_length":
                 if self.min_text_length is None:
                     return False
-                return len(application.e_description) > self.min_text_length
+                return len(application.e_description) < self.min_text_length
 
             elif self.condition_type == "combined":
                 date_ok = (
                     self.days_threshold is not None
                     and application.subm_date
-                    > application.e_start_time
                     + datetime.timedelta(days=self.days_threshold)
+                    >= application.e_start_time
                 )
                 role_ok = (
-                    self.role_id is not None
-                    and application.roles.filter(id=self.role_id).exists()
+                    self.role_id.exists()  # Изменено с is not None на exists()
+                    and application.roles.filter(
+                        id__in=self.role_id.values_list("id", flat=True)
+                    ).exists()
                 )
                 text_ok = (
                     self.min_text_length is not None
-                    and len(application.e_description) > self.min_text_length
+                    and len(application.e_description) < self.min_text_length
                 )
                 return date_ok and role_ok and text_ok
 
@@ -161,6 +164,7 @@ class RuleEngine:
                 if rule.evaluate(application):
                     return rule.new_status
             except Exception as e:
+                # FIXME - не работает логирование
                 logger.error(
                     f"Error evaluating rule {rule.id} for application "
                     f"{application.id}: {str(e)}"
