@@ -1,5 +1,7 @@
+import datetime
 import logging
 
+from django.core.exceptions import ValidationError
 from django.db import models
 
 logger = logging.getLogger(__name__)
@@ -115,3 +117,24 @@ class Rule(models.Model):
             return False
 
         return False
+
+    def clean(self):
+        if (
+            self.condition_type == "date_compare"
+            and self.days_threshold is None
+        ):
+            raise ValidationError(
+                "Для сравнения дат необходимо указать порог дней"
+            )
+        if self.condition_type == "role_check" and self.role_id is None:
+            raise ValidationError(
+                "Для проверки роли необходимо указать ID роли"
+            )
+        if (
+            self.condition_type == "text_length"
+            and self.min_text_length is None
+        ):
+            raise ValidationError(
+                "Для проверки длины текста необходимо указать минимальную"
+                " длину"
+            )
