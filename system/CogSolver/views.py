@@ -16,3 +16,7 @@ def index(request):
     }
     return render(request, 'CogSolver/index.html', context)
 
+
+def rules_report(request):
+    results = RuleEngine.batch_apply_rules()
+    return render(request, 'rules/report.html', {'results': results})
