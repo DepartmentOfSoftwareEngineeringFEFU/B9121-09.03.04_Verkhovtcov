@@ -14,6 +14,14 @@ logging.info("An INFO")
 logging.warning("A WARNING")
 logging.error("An ERROR")
 logging.critical("A message of CRITICAL severity")
+logging.basicConfig(level=logging.DEBUG, filename="py_log.log", filemode="w",
+                    format="%(asctime)s %(levelname)s %(message)s")
+
+logging.debug("A DEBUG Message")
+logging.info("An INFO")
+logging.warning("A WARNING")
+logging.error("An ERROR")
+logging.critical("A message of CRITICAL severity")
 
 
 class Rule(models.Model):
@@ -88,6 +96,7 @@ class Rule(models.Model):
         try:
             if self.condition_type == "date_compare":
                 logger.debug(f"{self.days_threshold=}")
+                logger.debug(f"{self.days_threshold=}")
                 if self.days_threshold is None:
                     return False
                 return (
@@ -125,6 +134,7 @@ class Rule(models.Model):
 
         except (TypeError, ValueError):
             logging.error("TypeError / ValueError", exc_info=True)
+            logging.error("TypeError / ValueError", exc_info=True)
             return False
 
         return False
@@ -135,11 +145,13 @@ class Rule(models.Model):
             and self.days_threshold is None
         ):
             logging.error("ValidationError", exc_info=True)
+            logging.error("ValidationError", exc_info=True)
             raise ValidationError(
                 "Для сравнения дат необходимо указать порог дней"
             )
-
+            
         if self.condition_type == "role_check" and self.role_id is None:
+            logging.error("ValidationError", exc_info=True)
             logging.error("ValidationError", exc_info=True)
             raise ValidationError(
                 "Для проверки роли необходимо указать ID роли"
@@ -148,6 +160,7 @@ class Rule(models.Model):
             self.condition_type == "text_length"
             and self.min_text_length is None
         ):
+            logging.error("ValidationError", exc_info=True)
             logging.error("ValidationError", exc_info=True)
             raise ValidationError(
                 "Для проверки длины текста необходимо указать минимальную"
