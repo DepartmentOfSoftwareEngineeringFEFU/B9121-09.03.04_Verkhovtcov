@@ -180,6 +180,7 @@ class RuleEngine:
                 if rule.evaluate(application):
                     return rule.new_status
             except Exception as e:
+                # FIXME - не работает логирование
                 logger.error(
                     f"Error evaluating rule {rule.id} for application "
                     f"{application.id}: {str(e)}"
