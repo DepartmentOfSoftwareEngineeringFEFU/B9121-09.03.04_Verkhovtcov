@@ -1,6 +1,7 @@
 import datetime
 import logging
 
+from CogEditor.models import Application
 from django.core.exceptions import ValidationError
 from django.db import models
 
@@ -143,3 +144,45 @@ class Rule(models.Model):
         verbose_name = "правило"
         verbose_name_plural = "правила"
         ordering = ["-priority", "name"]
+
+
+class RuleEngine:
+    @staticmethod
+    def apply_rules_to_application(
+        application,
+    ):
+        """Применяет все активные правила к заявке"""
+        rules = Rule.objects.filter(is_active=True).order_by("-priority")
+
+        for rule in rules:
+            try:
+                if rule.evaluate(application):
+                    return rule.new_status
+            except Exception as e:
+                logger.error(
+                    f"Error evaluating rule {rule.id} for application "
+                    f"{application.id}: {str(e)}"
+                )
+                continue
+
+        # Возвращаем исходный статус при ошибках или если правила не сработали
+        return application.status
+
+    @staticmethod
+    def batch_apply_rules():
+        """Применяет правила ко всем заявкам и возвращает результаты"""
+        results = []
+        applications = Application.objects.all()
+
+        for app in applications:
+            new_status = RuleEngine.apply_rules_to_application(app)
+            results.append(
+                {
+                    "application": app,
+                    "current_status": app.status,
+                    "new_status": new_status,
+                    "status_changed": new_status != app.status,
+                }
+            )
+
+        return results
