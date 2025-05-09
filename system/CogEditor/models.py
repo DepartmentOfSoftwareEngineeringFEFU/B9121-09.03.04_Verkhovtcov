@@ -130,7 +130,6 @@ class Application(models.Model):
     subm_date = models.DateTimeField(
         blank=False,
         verbose_name="Время регистрации заявки",
-        auto_now_add=True,
     )
 
     e_title = models.TextField(
