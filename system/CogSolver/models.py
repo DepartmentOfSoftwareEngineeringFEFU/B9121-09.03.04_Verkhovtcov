@@ -1,7 +1,7 @@
 import datetime
 import logging
 
-from CogEditor.models import Application
+from CogEditor.models import AgreedStatus, Application, ParticipatoryRole
 from django.core.exceptions import ValidationError
 from django.db import models
 
@@ -63,11 +63,13 @@ class Rule(models.Model):
         blank=True,
         verbose_name="Порог дней",
     )
-    role_id = models.IntegerField(
+    role_id = models.ManyToManyField(
+        ParticipatoryRole,
         null=True,
         blank=True,
-        verbose_name="ID роли",
+        verbose_name="Роли",
     )
+
     min_text_length = models.IntegerField(
         null=True,
         blank=True,
@@ -76,7 +78,7 @@ class Rule(models.Model):
 
     # Результирующий статус
     new_status = models.ForeignKey(
-        "CogEditor.AgreedStatus",
+        AgreedStatus,
         on_delete=models.CASCADE,
         verbose_name="Новый статус",
     )
