@@ -112,8 +112,9 @@ class Rule(models.Model):
                 date_ok = (
                     self.days_threshold is not None
                     and application.subm_date
-                    > application.e_start_time
                     + datetime.timedelta(days=self.days_threshold)
+                    >= application.e_start_time
+
                 )
                 role_ok = (
                     self.role_id is not None
