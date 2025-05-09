@@ -138,3 +138,8 @@ class Rule(models.Model):
                 "Для проверки длины текста необходимо указать минимальную"
                 " длину"
             )
+
+    class Meta:
+        verbose_name = "правило"
+        verbose_name_plural = "правила"
+        ordering = ["-priority", "name"]
