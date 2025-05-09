@@ -90,9 +90,10 @@ class Rule(models.Model):
                 )
 
             elif self.condition_type == "role_check":
-                if self.role_id is None:
+                if not self.role_id.exists():
                     return False
-                return application.roles.filter(id=self.role_id).exists()
+                role_ids = self.role_id.values_list("id", flat=True)
+                return application.roles.filter(id__in=role_ids).exists()
 
             elif self.condition_type == "text_length":
                 if self.min_text_length is None:
@@ -107,8 +108,10 @@ class Rule(models.Model):
                     >= application.e_start_time
                 )
                 role_ok = (
-                    self.role_id is not None
-                    and application.roles.filter(id=self.role_id).exists()
+                    self.role_id.exists()  # Изменено с is not None на exists()
+                    and application.roles.filter(
+                        id__in=self.role_id.values_list("id", flat=True)
+                    ).exists()
                 )
                 text_ok = (
                     self.min_text_length is not None
