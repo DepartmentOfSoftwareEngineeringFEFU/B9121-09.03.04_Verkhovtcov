@@ -98,7 +98,7 @@ class Rule(models.Model):
             elif self.condition_type == "text_length":
                 if self.min_text_length is None:
                     return False
-                return len(application.e_description) > self.min_text_length
+                return len(application.e_description) < self.min_text_length
 
             elif self.condition_type == "combined":
                 date_ok = (
@@ -115,7 +115,7 @@ class Rule(models.Model):
                 )
                 text_ok = (
                     self.min_text_length is not None
-                    and len(application.e_description) > self.min_text_length
+                    and len(application.e_description) < self.min_text_length
                 )
                 return date_ok and role_ok and text_ok
 
