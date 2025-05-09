@@ -6,9 +6,9 @@ from django.utils import timezone
 
 class StructuralUnit(models.Model):
     """Структурное подразделение"""
+
     unit = models.CharField(
-        max_length=128,
-        verbose_name="Наименование структурного подразделения"
+        max_length=128, verbose_name="Наименование структурного подразделения"
     )
 
     def __str__(self):
@@ -18,13 +18,14 @@ class StructuralUnit(models.Model):
         """Зарещенный на територии РФ класс, \
         описывающий наименование структурного подразделения на Рус. яз."""
 
-        verbose_name = 'структурное подразделение'
-        verbose_name_plural = 'Структурные подразделения'
-        ordering = ['unit']
+        verbose_name = "структурное подразделение"
+        verbose_name_plural = "Структурные подразделения"
+        ordering = ["unit"]
 
 
 class EmployeePosition(models.Model):
     """Должность сотрудника"""
+
     position = models.CharField(
         max_length=32,
         verbose_name="Наименование должности",
@@ -37,13 +38,14 @@ class EmployeePosition(models.Model):
         """Зарещенный на територии РФ класс, \
         описывающий наименование должностей сотрудников на Рус. яз."""
 
-        verbose_name = 'должность'
-        verbose_name_plural = 'Должности'
-        ordering = ['position']
+        verbose_name = "должность"
+        verbose_name_plural = "Должности"
+        ordering = ["position"]
 
 
 class Employee(models.Model):
     """Сотрудник ДВФУ"""
+
     full_name = models.CharField(
         max_length=64,
         verbose_name="ФИО сотрудника",
@@ -68,13 +70,14 @@ class Employee(models.Model):
         """Зарещенный на територии РФ класс, \
         описывающий сотрудников ДВФУ на Рус. яз."""
 
-        verbose_name = 'сотрудник'
-        verbose_name_plural = 'Сотрудники'
-        ordering = ['full_name']
+        verbose_name = "сотрудник"
+        verbose_name_plural = "Сотрудники"
+        ordering = ["full_name"]
 
 
 class ParticipatoryRole(models.Model):
     """Роль участников мероприятия"""
+
     role = models.CharField(
         max_length=64,
         verbose_name="Роль участника мероприятия",
@@ -92,13 +95,14 @@ class ParticipatoryRole(models.Model):
         """Зарещенный на територии РФ класс, \
         описывающий роли участников мероприятий на Рус. яз."""
 
-        verbose_name = 'роль участника'
-        verbose_name_plural = 'Роли участников'
-        ordering = ['role']
+        verbose_name = "роль участника"
+        verbose_name_plural = "Роли участников"
+        ordering = ["role"]
 
 
 class AgreedStatus(models.Model):
     """Статусы согласования мероприятий"""
+
     status = models.CharField(
         max_length=32,
         verbose_name="Наименование статуса согласования",
@@ -119,9 +123,11 @@ class AgreedStatus(models.Model):
         """Зарещенный на територии РФ класс, \
         описывающий статусы согласования заявок на Рус. яз."""
 
-        verbose_name = 'статус согласования'
-        verbose_name_plural = 'Статусы согласования'
-        ordering = ['n_stage', ]
+        verbose_name = "статус согласования"
+        verbose_name_plural = "Статусы согласования"
+        ordering = [
+            "n_stage",
+        ]
 
 
 class Application(models.Model):
@@ -130,7 +136,6 @@ class Application(models.Model):
     subm_date = models.DateTimeField(
         blank=False,
         verbose_name="Время регистрации заявки",
-        auto_now_add=True,
     )
 
     e_title = models.TextField(
@@ -184,6 +189,6 @@ class Application(models.Model):
         """Зарещенный на територии РФ класс, \
         описывающий заявки на мероприятия на Рус. яз."""
 
-        verbose_name = 'заявка'
-        verbose_name_plural = 'Заявки'
-        ordering = ['subm_date']
+        verbose_name = "заявка"
+        verbose_name_plural = "Заявки"
+        ordering = ["subm_date"]
