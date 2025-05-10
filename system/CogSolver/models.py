@@ -55,7 +55,6 @@ class Rule(models.Model):
     )
     role_id = models.ManyToManyField(
         ParticipatoryRole,
-        null=True,
         blank=True,
         verbose_name="Роли",
     )
