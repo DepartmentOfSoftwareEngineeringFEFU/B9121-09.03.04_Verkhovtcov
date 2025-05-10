@@ -1,8 +1,8 @@
-<!-- templates/rules/report.html -->
+<!-- templates/CogSolver/includes/report.html -->
 
 <div class="rules-report">
-    <h1>Результаты применения правил</h1>
-    
+    {% include "includes/summary_main.html" %}
+
     <div class="table-container">
         <table class="rules-table">
             <thead>
@@ -80,5 +80,10 @@
 
 .table-container {
     overflow-x: auto;
+    margin-bottom: 15px;
+}
+
+.summary-info > p {
+    margin-bottom: 0;
 }
 </style>

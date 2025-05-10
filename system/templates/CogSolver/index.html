@@ -1,13 +1,32 @@
 {% extends "base.html" %}
 
-{% block content%}
+{% block content %}
+<div class="rules-container">
     {% if results %}
-        {% block report %}
+        <div class="summary-section">
+            <h2>Общий отчет</h2>
             {% include "includes/report.html" %}
-        {% endblock %}
+        </div>
 
+        <div class="rules-section">
+
+            <h2>Детализация по правилам</h2>
+            {% include "includes/summary_detail.html" %}
+
+            {% for rule in rules %}
+                <div class="rule-accordion">
+                    <button class="accordion-button">
+                        <span class="rule-name">{{ rule.name }}</span>
+                        <span class="badge">{{ rule.changed_count }} изменений</span>
+                    </button>
+                    <div class="accordion-content">
+                        {% include "includes/rule_detail.html" with rule=rule %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     {% else %}
-        <p>Отсутствуют данные о заявках для отображения.</p>
+        <p class="no-data">Отсутствуют данные о заявках для отображения.</p>
     {% endif %}
-
+</div>
 {% endblock %}
