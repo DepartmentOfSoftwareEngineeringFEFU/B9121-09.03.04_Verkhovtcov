@@ -267,7 +267,7 @@ class Application(models.Model):
         verbose_name="Наименование мероприятия",
     )
     e_description = models.TextField(
-        max_length=512,
+        max_length=2048,
         verbose_name="Описание мероприятия",
         null=True,
     )
