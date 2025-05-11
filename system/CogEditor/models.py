@@ -190,7 +190,8 @@ class Schedule(models.Model):
 
     start = models.DateTimeField(
         verbose_name="Начало",
-        auto_now_add=True,
+        blank=True,
+        null=True,
     )
 
     end = models.DateTimeField(
@@ -241,6 +242,7 @@ class Application(models.Model):
     installation_deinstallation = models.ForeignKey(
         Schedule,
         verbose_name="Время монтажа/демонтажа",
+        blank=True,
         null=True,
         on_delete=models.CASCADE,
         # Уникальное имя для обратной связи
