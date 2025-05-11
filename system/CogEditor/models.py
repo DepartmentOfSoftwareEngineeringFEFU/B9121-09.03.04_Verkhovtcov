@@ -51,6 +51,20 @@ class Employee(models.Model):
         verbose_name="ФИО сотрудника",
     )
 
+    phone_number = models.CharField(
+        max_length=11,
+        verbose_name="Номер телефона в формате 89...",
+        blank=True,
+        null=True,
+    )
+
+    email = models.EmailField(
+        max_length=64,
+        verbose_name="Адрес электронной почты",
+        blank=True,
+        null=True,
+    )
+
     position = models.ForeignKey(
         EmployeePosition,
         on_delete=models.CASCADE,
