@@ -5,8 +5,9 @@ from django.utils import timezone
 
 def index(request):
     latest_application_list = Application.objects.filter(
-        e_start_time__gt=timezone.now()
-    )
+        event_schedule__start__gt=timezone.now()
+    ).distinct()
+
     output = ", ".join([q.e_title for q in latest_application_list])
     return HttpResponse(output)
 
