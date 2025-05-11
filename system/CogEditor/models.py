@@ -132,6 +132,7 @@ class AgreedStatus(models.Model):
 
 class Order(models.Model):
     """Приказ об организации мероприятия"""
+
     name = models.CharField(
         max_length=128,
         verbose_name="Наименование приказа",
@@ -160,6 +161,7 @@ class Order(models.Model):
 
 class EventFormat(models.Model):
     """Перечень форматов мероприятия"""
+
     name = models.CharField(
         max_length=64,
         verbose_name="Наименование",
@@ -227,9 +229,7 @@ class Application(models.Model):
     )
 
     organizer = models.ForeignKey(
-        StructuralUnit,
-        on_delete=models.CASCADE,
-        verbose_name="Организатор"
+        StructuralUnit, on_delete=models.CASCADE, verbose_name="Организатор"
     )
 
     organizer_employee = models.ForeignKey(
@@ -243,7 +243,24 @@ class Application(models.Model):
         Order,
         on_delete=models.CASCADE,
         verbose_name="Приказ на мероприятие",
-        null=True
+        null=True,
+    )
+
+    requires_technical_support = models.BooleanField(
+        default=False,
+        verbose_name="Требуется техническое сопровождение"
+    )
+
+    audio_training_date = models.DateField(
+        null=True,
+        blank=True,
+        verbose_name="Дата обучения работе со звуком"
+    )
+
+    technical_requirements = models.TextField(
+        blank=True,
+        null=True,
+        verbose_name="Технические требования"
     )
 
     status = models.ForeignKey(
