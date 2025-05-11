@@ -158,6 +158,31 @@ class Order(models.Model):
         ]
 
 
+class EventFormat(models.Model):
+    """Перечень форматов мероприятия"""
+    name = models.CharField(
+        max_length=64,
+        verbose_name="Наименование",
+    )
+    description = models.TextField(
+        max_length=512,
+        verbose_name="Описание",
+    )
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        """Зарещенный на територии РФ класс, \
+        описывающий статусы согласования заявок на Рус. яз."""
+
+        verbose_name = "формат"
+        verbose_name_plural = "Форматы"
+        ordering = [
+            "name",
+        ]
+
+
 class Application(models.Model):
     """Заявка на мероприятие"""
 
@@ -175,6 +200,13 @@ class Application(models.Model):
         max_length=512,
         verbose_name="Описание мероприятия",
         default="Некоторое описание мероприятия",
+    )
+
+    e_format = models.ForeignKey(
+        EventFormat,
+        on_delete=models.CASCADE,
+        verbose_name="Формат мероприятия",
+        null=True,
     )
 
     e_start_time = models.DateTimeField(
