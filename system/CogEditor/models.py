@@ -195,7 +195,22 @@ class Schedule(models.Model):
 
     end = models.DateTimeField(
         verbose_name="Окончание",
+        blank=True,
+        null=True,
     )
+
+    def __str__(self):
+        return f"{self.start} – {self.end}"
+
+    class Meta:
+        """Зарещенный на територии РФ класс, \
+        описывающий статусы согласования заявок на Рус. яз."""
+
+        verbose_name = "расписание"
+        verbose_name_plural = "Расписания"
+        ordering = [
+            "start",
+        ]
 
 
 class Application(models.Model):
