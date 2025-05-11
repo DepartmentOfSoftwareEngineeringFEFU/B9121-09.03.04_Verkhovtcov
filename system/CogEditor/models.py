@@ -194,12 +194,11 @@ class Application(models.Model):
     e_title = models.TextField(
         max_length=256,
         verbose_name="Наименование мероприятия",
-        default="Некоторое наименование мероприятия",
     )
     e_description = models.TextField(
         max_length=512,
         verbose_name="Описание мероприятия",
-        default="Некоторое описание мероприятия",
+        null=True,
     )
 
     e_format = models.ForeignKey(
