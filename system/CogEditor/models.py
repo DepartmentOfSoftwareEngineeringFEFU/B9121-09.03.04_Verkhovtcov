@@ -228,12 +228,38 @@ class Schedule(models.Model):
         ]
 
 
+class Sources(models.Model):
+    name = models.CharField(
+        verbose_name="Наименование источника",
+    )
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        """Зарещенный на територии РФ класс, \
+        описывающий статусы согласования заявок на Рус. яз."""
+
+        verbose_name = "источник получения заявки"
+        verbose_name_plural = "Источники получения заявок"
+        ordering = [
+            "name",
+        ]
+
+
 class Application(models.Model):
     """Заявка на мероприятие"""
 
     subm_date = models.DateTimeField(
         blank=False,
         verbose_name="Время регистрации заявки",
+    )
+
+    application_source = models.ForeignKey(
+        Sources,
+        on_delete=models.CASCADE,
+        verbose_name="Способ получения",
+        null=True,
     )
 
     e_title = models.TextField(
@@ -296,6 +322,7 @@ class Application(models.Model):
         Order,
         on_delete=models.CASCADE,
         verbose_name="Приказ на мероприятие",
+        blank=True,
         null=True,
     )
 

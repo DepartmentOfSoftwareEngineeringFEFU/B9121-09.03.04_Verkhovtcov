@@ -1,6 +1,7 @@
 from CogEditor.models import (AgreedStatus, Application, Employee,
                               EmployeePosition, EventFormat, Order,
-                              ParticipatoryRole, Schedule, StructuralUnit)
+                              ParticipatoryRole, Schedule, Sources,
+                              StructuralUnit)
 from django.contrib import admin
 
 admin.site.register(AgreedStatus)
@@ -11,4 +12,5 @@ admin.site.register(EventFormat)
 admin.site.register(Order)
 admin.site.register(ParticipatoryRole)
 admin.site.register(Schedule)
+admin.site.register(Sources)
 admin.site.register(StructuralUnit)
