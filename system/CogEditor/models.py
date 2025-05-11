@@ -168,9 +168,16 @@ class Application(models.Model):
     )
 
     organizer = models.ForeignKey(
+        StructuralUnit,
+        on_delete=models.CASCADE,
+        verbose_name="Организатор"
+    )
+
+    organizer_employee = models.ForeignKey(
         Employee,
         on_delete=models.CASCADE,
-        verbose_name="Организатор мероприятия",
+        verbose_name="Ответственный за организацию",
+        null=True,
     )
 
     status = models.ForeignKey(
