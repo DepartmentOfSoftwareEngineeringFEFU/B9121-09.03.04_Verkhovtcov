@@ -185,6 +185,19 @@ class EventFormat(models.Model):
         ]
 
 
+class Schedule(models.Model):
+    """Расписание мероприятия"""
+
+    start = models.DateTimeField(
+        verbose_name="Начало",
+        auto_now_add=True,
+    )
+
+    end = models.DateTimeField(
+        verbose_name="Окончание",
+    )
+
+
 class Application(models.Model):
     """Заявка на мероприятие"""
 
@@ -210,12 +223,21 @@ class Application(models.Model):
         null=True,
     )
 
-    e_start_time = models.DateTimeField(
-        verbose_name="Дата и время начала мероприятия",
+    installation_deinstallation = models.ForeignKey(
+        Schedule,
+        verbose_name="Время монтажа/демонтажа",
+        null=True,
+        on_delete=models.CASCADE,
+        # Уникальное имя для обратной связи
+        related_name="installation_applications",
     )
 
-    e_end_time = models.DateTimeField(
-        verbose_name="Дата и время окончания мероприятия",
+    event_schedule = models.ManyToManyField(
+        Schedule,
+        verbose_name="Время бронирования",
+        blank=True,
+        # Уникальное имя для обратной связи
+        related_name="event_applications",
     )
 
     number_of_participants = models.IntegerField(
@@ -247,20 +269,15 @@ class Application(models.Model):
     )
 
     requires_technical_support = models.BooleanField(
-        default=False,
-        verbose_name="Требуется техническое сопровождение"
+        default=False, verbose_name="Требуется техническое сопровождение"
     )
 
     audio_training_date = models.DateField(
-        null=True,
-        blank=True,
-        verbose_name="Дата обучения работе со звуком"
+        null=True, blank=True, verbose_name="Дата обучения работе со звуком"
     )
 
     technical_requirements = models.TextField(
-        blank=True,
-        null=True,
-        verbose_name="Технические требования"
+        blank=True, null=True, verbose_name="Технические требования"
     )
 
     status = models.ForeignKey(
