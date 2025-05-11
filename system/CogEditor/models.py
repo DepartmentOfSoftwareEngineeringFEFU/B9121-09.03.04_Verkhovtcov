@@ -130,6 +130,34 @@ class AgreedStatus(models.Model):
         ]
 
 
+class Order(models.Model):
+    """Приказ об организации мероприятия"""
+    name = models.CharField(
+        max_length=128,
+        verbose_name="Наименование приказа",
+    )
+    date = models.DateField(
+        verbose_name="Дата приказа",
+    )
+    number = models.CharField(
+        max_length=10,
+        verbose_name="Номер приказа",
+    )
+
+    def __str__(self):
+        return f"Приказ от {self.date} № {self.number} «{self.name}»"
+
+    class Meta:
+        """Зарещенный на територии РФ класс, \
+        описывающий статусы согласования заявок на Рус. яз."""
+
+        verbose_name = "приказ"
+        verbose_name_plural = "Приказы"
+        ordering = [
+            "date",
+        ]
+
+
 class Application(models.Model):
     """Заявка на мероприятие"""
 
@@ -178,6 +206,13 @@ class Application(models.Model):
         on_delete=models.CASCADE,
         verbose_name="Ответственный за организацию",
         null=True,
+    )
+
+    order = models.ForeignKey(
+        Order,
+        on_delete=models.CASCADE,
+        verbose_name="Приказ на мероприятие",
+        null=True
     )
 
     status = models.ForeignKey(
