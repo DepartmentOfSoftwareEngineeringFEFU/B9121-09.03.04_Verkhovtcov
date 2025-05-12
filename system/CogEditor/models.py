@@ -100,6 +100,8 @@ class ParticipatoryRole(models.Model):
     description = models.TextField(
         max_length=512,
         verbose_name="Описание роли участника",
+        blank=True,
+        null=True,
     )
 
     def __str__(self):
@@ -184,6 +186,8 @@ class EventFormat(models.Model):
     description = models.TextField(
         max_length=512,
         verbose_name="Описание",
+        blank=True,
+        null=True,
     )
 
     def __str__(self):
