@@ -51,6 +51,18 @@ class Employee(models.Model):
         verbose_name="ФИО сотрудника",
     )
 
+    position = models.ForeignKey(
+        EmployeePosition,
+        on_delete=models.CASCADE,
+        verbose_name="Должность сотрудника",
+    )
+
+    structural_unit = models.ForeignKey(
+        StructuralUnit,
+        on_delete=models.CASCADE,
+        verbose_name="Структурное подразделение",
+    )
+
     phone_number = models.CharField(
         max_length=11,
         verbose_name="Номер телефона в формате 89...",
@@ -63,18 +75,6 @@ class Employee(models.Model):
         verbose_name="Адрес электронной почты",
         blank=True,
         null=True,
-    )
-
-    position = models.ForeignKey(
-        EmployeePosition,
-        on_delete=models.CASCADE,
-        verbose_name="Должность сотрудника",
-    )
-
-    structural_unit = models.ForeignKey(
-        StructuralUnit,
-        on_delete=models.CASCADE,
-        verbose_name="Структурное подразделение",
     )
 
     def __str__(self):
