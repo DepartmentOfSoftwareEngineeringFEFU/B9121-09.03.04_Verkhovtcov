@@ -3,6 +3,7 @@ from django.shortcuts import render
 
 
 def rules_report(request):
+    # FIXME - обновить логику после коммита d41f374
     raw_results = RuleEngine.batch_apply_rules()
     changed_count = sum(1 for r in raw_results if r['status_changed'])
 

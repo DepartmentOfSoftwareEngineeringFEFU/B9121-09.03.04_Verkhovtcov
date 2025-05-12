@@ -80,6 +80,7 @@ class Rule(models.Model):
 
         try:
             if self.condition_type == "date_compare":
+                # FIXME - Обновить логику. e_start_time отсутствует в CogEditor.models.Application
                 if self.days_threshold is None:
                     return False
                 return (
@@ -100,6 +101,7 @@ class Rule(models.Model):
                 return len(application.e_description) < self.min_text_length
 
             elif self.condition_type == "combined":
+                # FIXME - Обновить логику. e_start_time отсутствует в CogEditor.models.Application
                 date_ok = (
                     self.days_threshold is not None
                     and application.subm_date
