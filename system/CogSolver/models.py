@@ -80,13 +80,24 @@ class Rule(models.Model):
 
         try:
             if self.condition_type == "date_compare":
-                # FIXME - Обновить логику. e_start_time отсутствует в CogEditor.models.Application
                 if self.days_threshold is None:
                     return False
-                return (
-                    application.subm_date
-                    + datetime.timedelta(days=self.days_threshold)
-                    >= application.e_start_time
+
+                # Получаем все расписания мероприятия
+                event_schedules = application.event_schedule.all()
+
+                # Если нет расписаний, условие не выполняется
+                if not event_schedules.exists():
+                    return False
+
+                # Проверяем все даты начала мероприятий
+                threshold_date = application.subm_date + datetime.timedelta(
+                    days=self.days_threshold
+                )
+                return all(
+                    threshold_date >= schedule.start
+                    for schedule in event_schedules
+                    if schedule.start is not None
                 )
 
             elif self.condition_type == "role_check":
@@ -101,13 +112,21 @@ class Rule(models.Model):
                 return len(application.e_description) < self.min_text_length
 
             elif self.condition_type == "combined":
-                # FIXME - Обновить логику. e_start_time отсутствует в CogEditor.models.Application
-                date_ok = (
-                    self.days_threshold is not None
-                    and application.subm_date
-                    + datetime.timedelta(days=self.days_threshold)
-                    >= application.e_start_time
-                )
+                date_ok = False
+                if self.days_threshold is not None:
+                    threshold_date = (
+                        application.subm_date
+                        + datetime.timedelta(days=self.days_threshold)
+                    )
+                    event_schedules = application.event_schedule.all()
+                    # Есть хотя бы одно расписание
+                    # Все даты начала соответствуют условию
+                    date_ok = event_schedules.exists() and all(
+                        threshold_date >= schedule.start
+                        for schedule in event_schedules
+                        if schedule.start is not None
+                    )
+
                 role_ok = (
                     self.role_id.exists()  # Изменено с is not None на exists()
                     and application.roles.filter(
