@@ -82,10 +82,22 @@ class Rule(models.Model):
             if self.condition_type == "date_compare":
                 if self.days_threshold is None:
                     return False
-                return (
-                    application.subm_date
-                    + datetime.timedelta(days=self.days_threshold)
-                    >= application.e_start_time
+
+                # Получаем все расписания мероприятия
+                event_schedules = application.event_schedule.all()
+
+                # Если нет расписаний, условие не выполняется
+                if not event_schedules.exists():
+                    return False
+
+                # Проверяем все даты начала мероприятий
+                threshold_date = application.subm_date + datetime.timedelta(
+                    days=self.days_threshold
+                )
+                return all(
+                    threshold_date >= schedule.start
+                    for schedule in event_schedules
+                    if schedule.start is not None
                 )
 
             elif self.condition_type == "role_check":
@@ -100,22 +112,34 @@ class Rule(models.Model):
                 return len(application.e_description) < self.min_text_length
 
             elif self.condition_type == "combined":
-                date_ok = (
-                    self.days_threshold is not None
-                    and application.subm_date
-                    + datetime.timedelta(days=self.days_threshold)
-                    >= application.e_start_time
-                )
-                role_ok = (
-                    self.role_id.exists()  # Изменено с is not None на exists()
-                    and application.roles.filter(
+                # Инициализация флагов
+                date_ok = role_ok = text_ok = True
+
+                # Проверка дат
+                if self.days_threshold is not None:
+                    threshold_date = (
+                        application.subm_date
+                        + datetime.timedelta(days=self.days_threshold)
+                    )
+                    event_schedules = application.event_schedule.all()
+                    date_ok = event_schedules.exists() and all(
+                        schedule.start and threshold_date >= schedule.start
+                        for schedule in event_schedules
+                    )
+
+                # Проверка ролей
+                if self.role_id.exists():  # Упрощенная проверка
+                    role_ok = application.roles.filter(
                         id__in=self.role_id.values_list("id", flat=True)
                     ).exists()
-                )
-                text_ok = (
-                    self.min_text_length is not None
-                    and len(application.e_description) < self.min_text_length
-                )
+
+                # Проверка длины текста
+                if self.min_text_length is not None:
+                    text_ok = (
+                        len(application.e_description or "")
+                        < self.min_text_length
+                    )
+
                 return date_ok and role_ok and text_ok
 
         except (TypeError, ValueError):
