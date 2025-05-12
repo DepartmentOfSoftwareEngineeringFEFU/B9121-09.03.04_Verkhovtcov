@@ -112,31 +112,34 @@ class Rule(models.Model):
                 return len(application.e_description) < self.min_text_length
 
             elif self.condition_type == "combined":
-                date_ok = False
+                # Инициализация флагов
+                date_ok = role_ok = text_ok = True
+
+                # Проверка дат
                 if self.days_threshold is not None:
                     threshold_date = (
                         application.subm_date
                         + datetime.timedelta(days=self.days_threshold)
                     )
                     event_schedules = application.event_schedule.all()
-                    # Есть хотя бы одно расписание
-                    # Все даты начала соответствуют условию
                     date_ok = event_schedules.exists() and all(
-                        threshold_date >= schedule.start
+                        schedule.start and threshold_date >= schedule.start
                         for schedule in event_schedules
-                        if schedule.start is not None
                     )
 
-                role_ok = (
-                    self.role_id.exists()  # Изменено с is not None на exists()
-                    and application.roles.filter(
+                # Проверка ролей
+                if self.role_id.exists():  # Упрощенная проверка
+                    role_ok = application.roles.filter(
                         id__in=self.role_id.values_list("id", flat=True)
                     ).exists()
-                )
-                text_ok = (
-                    self.min_text_length is not None
-                    and len(application.e_description) < self.min_text_length
-                )
+
+                # Проверка длины текста
+                if self.min_text_length is not None:
+                    text_ok = (
+                        len(application.e_description or "")
+                        < self.min_text_length
+                    )
+
                 return date_ok and role_ok and text_ok
 
         except (TypeError, ValueError):
