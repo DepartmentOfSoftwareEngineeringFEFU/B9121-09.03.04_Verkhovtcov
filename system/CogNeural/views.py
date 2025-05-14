@@ -6,7 +6,9 @@ import pandas as pd
 import seaborn as sns
 from CogEditor.models import Application
 from CogNeural.LogisticRegression import process_time_features
-from django.db.models import DurationField, ExpressionWrapper, F
+
+from django.db.models import DurationField, ExpressionWrapper, F, IntegerField
+from django.db.models.functions import Length
 from django.http import HttpResponse
 from django.shortcuts import render
 from sklearn.linear_model import LogisticRegression
@@ -26,11 +28,16 @@ def index(request):
         event_duration=ExpressionWrapper(
             F("event_schedule__end") - F("event_schedule__start"),
             output_field=DurationField(),
+        ),
+        description_len=ExpressionWrapper(
+            Length(F("e_description")),
+            output_field=IntegerField(),
         )
     ).values(
         "id",
         "subm_date",
         "status_id",
+        "description_len",
         "number_of_participants",
         "requires_technical_support",
         "processing_time",
