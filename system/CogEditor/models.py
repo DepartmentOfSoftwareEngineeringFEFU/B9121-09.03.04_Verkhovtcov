@@ -8,7 +8,9 @@ class StructuralUnit(models.Model):
     """Структурное подразделение"""
 
     unit = models.CharField(
-        max_length=128, verbose_name="Наименование структурного подразделения"
+        max_length=128,
+        verbose_name="Наименование структурного подразделения",
+        unique=True,
     )
 
     def __str__(self):
@@ -29,6 +31,7 @@ class EmployeePosition(models.Model):
     position = models.CharField(
         max_length=32,
         verbose_name="Наименование должности",
+        unique=True,
     )
 
     def __str__(self):
@@ -49,6 +52,7 @@ class Employee(models.Model):
     full_name = models.CharField(
         max_length=64,
         verbose_name="ФИО сотрудника",
+        unique=True,
     )
 
     position = models.ForeignKey(
@@ -96,6 +100,7 @@ class ParticipatoryRole(models.Model):
         max_length=64,
         verbose_name="Роль участника мероприятия",
         default="Некоторая роль",
+        unique=True,
     )
     description = models.TextField(
         max_length=512,
