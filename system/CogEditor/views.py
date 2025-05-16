@@ -1,8 +1,6 @@
 from CogEditor.models import Application, Employee
-from django.http import HttpResponse
-from django.utils import timezone
-from django.views import generic
 from django.shortcuts import get_object_or_404
+from django.views import generic
 
 
 class IndexView(generic.ListView):

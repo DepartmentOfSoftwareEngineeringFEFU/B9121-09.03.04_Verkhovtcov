@@ -6,7 +6,6 @@ import pandas as pd
 import seaborn as sns
 from CogEditor.models import Application
 from CogNeural.LogisticRegression import process_time_features
-
 from django.db.models import DurationField, ExpressionWrapper, F, IntegerField
 from django.db.models.functions import Length
 from django.http import HttpResponse
