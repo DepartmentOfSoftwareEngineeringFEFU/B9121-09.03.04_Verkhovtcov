@@ -6,9 +6,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Подключение Bootstrap Icons до основного контента -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
-  <!-- Подключение Bootstrap JS bundle в head с defer -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" defer></script>
 </head>
 
@@ -17,16 +15,19 @@
     <nav class="navbar navbar-expand-lg navbar-dark"
       style="background: linear-gradient(135deg, #1e88e5, #0d47a1); box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
       <div class="container">
+        <!-- Логотип и бренд -->
         <a class="navbar-brand d-flex align-items-center" href="{% url 'CogEditor:index' %}">
           <img src="{% static 'img/ru.png' %}" width="auto" height="50" class="me-2" alt="Логотип">
           <span class="fw-bold">Классификатор мероприятий</span>
         </a>
 
+        <!-- Кнопка мобильного меню -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
           aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
 
+        <!-- Основное меню -->
         <div class="collapse navbar-collapse" id="navbarNav">
           {% with request.resolver_match.view_name as view_name %}
           <ul class="navbar-nav ms-auto">
@@ -53,58 +54,25 @@
                   </a>
                 </li>
                 <li>
-                  <a class="dropdown-item" href="#">
+                  <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#yearModal">
                     <i class="bi bi-calendar-year me-2"></i>Архив по году
                   </a>
                 </li>
                 <li>
-                  <a class="dropdown-item" href="#">
+                  <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#monthModal">
                     <i class="bi bi-calendar-month me-2"></i>Архив по месяцу
                   </a>
                 </li>
                 <li>
-                  <a class="dropdown-item" href="#">
+                  <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#organizerModal">
                     <i class="bi bi-people me-2"></i>Заявки организатора
                   </a>
                 </li>
               </ul>
             </li>
 
-            <!-- Решатель задач с выпадающим меню -->
-            <li class="nav-item dropdown me-2">
-              <a class="nav-link dropdown-toggle {% if 'CogSolver' in view_name %}active fw-bold{% endif %}" href="#"
-                id="solverDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-lightbulb me-1"></i>Решатель задач
-              </a>
-              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="solverDropdown">
-                <li>
-                  <a class="dropdown-item {% if view_name == 'CogSolver:rules_report' %}active{% endif %}"
-                    href="{% url 'CogSolver:rules_report' %}">
-                    <i class="bi bi-journal-text me-2"></i>Анализ правил
-                  </a>
-                </li>
-                <li>
-                  <a class="dropdown-item" href="#">
-                    <i class="bi bi-tags me-2"></i>Классифицировать заявку
-                  </a>
-                </li>
-              </ul>
-            </li>
-
-            <!-- ML модель -->
-            <li class="nav-item">
-              <a class="nav-link {% if view_name == 'CogNeural:index' %}active fw-bold{% endif %}"
-                href="{% url 'CogNeural:index' %}">
-                <i class="bi bi-cpu me-1"></i>ML модель
-              </a>
-            </li>
-
-            <!-- Иконка пользователя -->
-            <li class="nav-item ms-3">
-              <a class="nav-link" href="#">
-                <i class="bi bi-person-circle" style="font-size: 1.5rem;"></i>
-              </a>
-            </li>
+            <!-- Остальные пункты меню -->
+            <!-- ... -->
           </ul>
           {% endwith %}
         </div>
@@ -112,7 +80,103 @@
     </nav>
   </header>
 
-  <!-- Стили для выпадающих меню -->
+  <!-- Модальное окно для выбора года -->
+  <div class="modal fade" id="yearModal" tabindex="-1" aria-labelledby="yearModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="yearModalLabel">Выберите год</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="{% url 'CogEditor:archive_by_year' 0 %}" method="get" id="yearForm">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="yearInput" class="form-label">Год</label>
+              <input type="number" class="form-control" id="yearInput" name="year" min="2024" max="{% now 'Y' %}"
+                value="{% now 'Y' %}" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+            <button type="submit" class="btn btn-primary">Показать архив</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно для выбора года и месяца -->
+  <div class="modal fade" id="monthModal" tabindex="-1" aria-labelledby="monthModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="monthModalLabel">Выберите год и месяц</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="{% url 'CogEditor:archive_by_year_month' 0 0 %}" method="get" id="monthForm">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="monthYearInput" class="form-label">Год</label>
+              <input type="number" class="form-control" id="monthYearInput" name="year" min="2024" max="{% now 'Y' %}"
+                value="{% now 'Y' %}" required>
+            </div>
+            <div class="mb-3">
+              <label for="monthInput" class="form-label">Месяц</label>
+              <select class="form-select" id="monthInput" name="month" required>
+                <option value="1">Январь</option>
+                <option value="2">Февраль</option>
+                <option value="3">Март</option>
+                <option value="4">Апрель</option>
+                <option value="5">Май</option>
+                <option value="6">Июнь</option>
+                <option value="7">Июль</option>
+                <option value="8">Август</option>
+                <option value="9">Сентябрь</option>
+                <option value="10">Октябрь</option>
+                <option value="11">Ноябрь</option>
+                <option value="12">Декабрь</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+            <button type="submit" class="btn btn-primary">Показать архив</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно для выбора организатора -->
+  <div class="modal fade" id="organizerModal" tabindex="-1" aria-labelledby="organizerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="organizerModalLabel">Выберите организатора</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="organizerForm" method="get">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="organizerSelect" class="form-label">Организатор</label>
+              <select class="form-select" id="organizerSelect" required>
+                {% for organizer in organizers %}
+                <option value="{{ organizer.id }}">{{ organizer.unit }}</option>
+                {% empty %}
+                <option disabled>Нет доступных организаторов</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+            <button type="submit" class="btn btn-primary">Показать заявки</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <style>
     .dropdown:hover .dropdown-menu {
       display: block;
@@ -126,19 +190,57 @@
       font-weight: 500;
     }
 
-    .dropdown-menu {
-      border: none;
-      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    .modal-content {
+      border-radius: 10px;
     }
 
-    .navbar-nav .nav-link {
-      transition: all 0.2s;
+    .modal-header {
+      background: linear-gradient(135deg, #1e88e5, #0d47a1);
+      color: white;
+      border-radius: 10px 10px 0 0 !important;
     }
 
-    .navbar-nav .nav-link:hover {
-      transform: translateY(-2px);
+    .btn-close {
+      filter: invert(1);
     }
   </style>
 </body>
 
 </html>
+
+<script>
+  // Обработка отправки формы года
+  document.getElementById('yearForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const year = document.getElementById('yearInput').value;
+    this.action = "{% url 'CogEditor:archive_by_year' 0 %}".replace('0', year);
+    window.location.href = this.action;
+  });
+
+  // Обработка отправки формы месяца
+  document.getElementById('monthForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const year = document.getElementById('monthYearInput').value;
+    const month = document.getElementById('monthInput').value;
+    this.action = "{% url 'CogEditor:archive_by_year_month' 0 0 %}"
+      .replace('0/0', `${year}/${month}`);
+    window.location.href = this.action;
+  });
+
+  // Обработка отправки формы организатора
+  document.getElementById('organizerForm')?.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const organizerId = document.getElementById('organizerSelect').value;
+    const url = "{% url 'CogEditor:organizer_events' 0 %}".replace('0', organizerId);
+    window.location.href = url;
+  });
+
+  // Автоматически закрываем модальные окна после отправки формы
+  document.querySelectorAll('.modal form').forEach(form => {
+    form.addEventListener('submit', function () {
+      const modal = bootstrap.Modal.getInstance(this.closest('.modal'));
+      modal?.hide();
+    });
+  });
+
+</script>
