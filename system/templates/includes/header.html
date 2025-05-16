@@ -71,8 +71,42 @@
               </ul>
             </li>
 
-            <!-- Остальные пункты меню -->
-            <!-- ... -->
+            <!-- Решатель задач с выпадающим меню -->
+            <li class="nav-item dropdown me-2">
+              <a class="nav-link dropdown-toggle {% if 'CogSolver' in view_name %}active fw-bold{% endif %}" href="#"
+                id="solverDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-lightbulb me-1"></i>Решатель задач
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="solverDropdown">
+                <li>
+                  <a class="dropdown-item {% if view_name == 'CogSolver:rules_report' %}active{% endif %}"
+                    href="{% url 'CogSolver:rules_report' %}">
+                    <i class="bi bi-journal-text me-2"></i>Анализ правил
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#">
+                    <i class="bi bi-tags me-2"></i>Классифицировать заявку
+                  </a>
+                </li>
+              </ul>
+            </li>
+
+            <!-- ML модель -->
+            <li class="nav-item">
+              <a class="nav-link {% if view_name == 'CogNeural:index' %}active fw-bold{% endif %}"
+                href="{% url 'CogNeural:index' %}">
+                <i class="bi bi-cpu me-1"></i>ML модель
+              </a>
+            </li>
+
+            <!-- Иконка пользователя -->
+            <li class="nav-item ms-3">
+              <a class="nav-link" href="#">
+                <i class="bi bi-person-circle" style="font-size: 1.5rem;"></i>
+              </a>
+            </li>
+
           </ul>
           {% endwith %}
         </div>
