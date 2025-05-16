@@ -30,18 +30,16 @@ def rules_report(request):
             {'name': 'ID', 'key': 'application.id'},
             {'name': 'Название', 'key': 'application.e_title'},
             {'name': 'Дата подачи', 'key': 'application.subm_date'},
-            {'name': 'Дата начала', 'key': 'application.e_start_time'},
-            {'name': 'Текущий статус', 'key': 'current_status'},
-            {'name': 'Новый статус', 'key': 'new_status'},
+            {'name': 'Статус в БД', 'key': 'current_status'},
+            {'name': 'Статус классификатора', 'key': 'new_status'},
             {'name': 'Изменен?', 'key': 'status_changed'},
         ],
         'columns_changed': [
             {'name': 'ID', 'key': 'application.id'},
             {'name': 'Название', 'key': 'application.e_title'},
             {'name': 'Дата подачи', 'key': 'application.subm_date'},
-            {'name': 'Дата начала', 'key': 'application.e_start_time'},
-            {'name': 'Текущий статус', 'key': 'current_status'},
-            {'name': 'Новый статус', 'key': 'new_status'},
+             {'name': 'Статус в БД', 'key': 'current_status'},
+            {'name': 'Статус классификатора', 'key': 'new_status'},
         ]
     }
     return render(request, 'CogSolver/index.html', context)
