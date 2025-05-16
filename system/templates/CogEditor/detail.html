@@ -80,13 +80,28 @@
                     <div class="card">
                         <div class="card-body">
                             {% if application.event_schedule.all %}
-                            <ul style="margin-bottom: 0%;">
-                                {% for schedule in application.event_schedule.all %}
-                                <li>{{ schedule }}</li>
-                                {% endfor %}
-                            </ul>
+                                <div class="schedule-container">
+                                    {% for schedule in application.event_schedule.all %}
+                                        <div class="schedule-item mb-2">
+                                            {% if schedule.start|date:"d.m.Y" == schedule.end|date:"d.m.Y" %}
+                                                {# Событие в один день #}
+                                                <div class="fw-bold">{{ schedule.start|date:"d.m.Y" }}</div>
+                                                <div>{{ schedule.start|date:"H:i" }} – {{ schedule.end|date:"H:i" }}</div>
+                                            {% else %}
+                                                {# Событие на несколько дней #}
+                                                <div class="d-flex flex-column">
+                                                    <span class="fw-bold">Начало:</span>
+                                                    <span>{{ schedule.start|date:"d.m.Y H:i" }}</span>
+                                                    <span class="fw-bold my-1">Окончание:</span>
+                                                    <span>{{ schedule.end|date:"d.m.Y H:i" }}</span>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                        {% if not forloop.last %}<hr class="my-2">{% endif %}
+                                    {% endfor %}
+                                </div>
                             {% else %}
-                            Не указано
+                                <span class="text-muted">Не указано</span>
                             {% endif %}
                         </div>
                     </div>
@@ -136,6 +151,12 @@
         </div>
     </div>
 </div>
+
+<style>
+    .card-body > p{
+        margin-bottom: 0%;
+    }
+</style>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 {% endblock %}

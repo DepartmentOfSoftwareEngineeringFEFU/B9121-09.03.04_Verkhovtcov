@@ -40,10 +40,23 @@
                     <td class="text-center">
                         {% if application.event_schedule.all %}
                         {% for schedule in application.event_schedule.all|slice:":2" %}
-                        <div>{{ schedule.start|date:"d.m.Y H:i" }}–{{ schedule.end|date:"H:i" }}</div>
+                        <div class="schedule-item">
+                            {% if schedule.start|date:"d.m.Y" == schedule.end|date:"d.m.Y" %}
+                            {# Событие в один день #}
+                            {{ schedule.start|date:"d.m.Y" }}<br>
+                            {{ schedule.start|date:"H:i" }}–{{ schedule.end|date:"H:i" }}
+                            {% else %}
+                            {# Событие на несколько дней #}
+                            {{ schedule.start|date:"d.m.Y H:i" }}<br>
+                            –<br>
+                            {{ schedule.end|date:"d.m.Y H:i" }}
+                            {% endif %}
+                        </div>
+                        {% if not forloop.last %}
+                        <hr class="my-1">{% endif %}
                         {% endfor %}
                         {% if application.event_schedule.count > 2 %}
-                        <span class="badge bg-info">+{{ application.event_schedule.count|add:"-2" }} ещё</span>
+                        <span class="badge bg-info mt-1">+{{ application.event_schedule.count|add:"-2" }} ещё</span>
                         {% endif %}
                         {% else %}
                         <span class="text-muted">Не указано</span>
@@ -113,4 +126,23 @@
         </a>
     </div>
 </div>
+
+<style>
+    .schedule-item {
+        font-size: 0.9rem;
+        line-height: 1.3;
+    }
+    
+    .schedule-item hr {
+        margin: 0.25rem 0;
+        opacity: 0.2;
+    }
+    
+    @media (max-width: 768px) {
+        .schedule-item {
+            font-size: 0.85rem;
+        }
+    }
+</style>
+
 {% endblock %}
