@@ -6,28 +6,24 @@ app_name = "CogEditor"
 
 
 urlpatterns = [
-    path("",
-         views.index,
-         name="index"
-         ),
-    path("application/archive/<int:year>/<int:month>",
-         views.archive_by_year_month,
-         name="archive_by_year_month",
-         ),
-    path("application/archive/<int:year>/",
-         views.archive_by_year,
-         name="archive_by_year",
-         ),
-    path("application/archive/",
-         views.full_archive,
-         name="archive",
-         ),
-    path("application/<int:id>/",
-         views.application_detail,
-         name="application_detail",
-         ),
-    path("organizer/<int:id>/events/",
-         views.organizer_events,
-         name="organizer_events",
-         ),
+    path("", views.IndexView.as_view(), name="index"),
+    path("<int:pk>/", views.DetailView.as_view(), name="detail"),
+    path(
+        "application/archive/<int:year>/<int:month>/",
+        views.ArchiveByYearMonthView.as_view(),
+        name="archive_by_year_month",
+    ),
+    path(
+        "application/archive/<int:year>/",
+        views.ArchiveByYearView.as_view(),
+        name="archive_by_year",
+    ),
+    path(
+        "application/archive/", views.FullArchiveView.as_view(), name="archive"
+    ),
+    path(
+        "organizer/<int:id>/events/",
+        views.OrganizerEventsView.as_view(),
+        name="organizer_events",
+    ),
 ]

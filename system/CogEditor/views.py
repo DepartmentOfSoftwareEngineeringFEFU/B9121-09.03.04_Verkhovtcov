@@ -1,57 +1,88 @@
 from CogEditor.models import Application, Employee
 from django.http import HttpResponse
 from django.utils import timezone
+from django.views import generic
+from django.shortcuts import get_object_or_404
 
 
-def index(request):
-    latest_application_list = Application.objects.filter(
-        event_schedule__start__gt=timezone.now()
-    ).distinct()
+class IndexView(generic.ListView):
+    template_name = "CogEditor/index.html"
+    context_object_name = "latest_application_list"
 
-    output = ", ".join([q.e_title for q in latest_application_list])
-    return HttpResponse(output)
-
-
-def archive_by_year_month(request, year, month):
-
-    # start.year <= year <= end.year
-    archive_application_list = Application.objects.filter(
-        e_start_time__year__lte=year,
-        e_end_time__year__gte=year,
-        e_start_time__month__lte=month,
-        e_end_time__month__gte=month,
-    )
-
-    output = ", ".join([q.e_title for q in archive_application_list])
-    return HttpResponse(output)
+    def get_queryset(self):
+        """Возвращает 5 последних заявок"""
+        return Application.objects.order_by("-subm_date")[:5]
 
 
-def archive_by_year(request, year):
-
-    # start.year <= year <= end.year
-    archive_application_list = Application.objects.filter(
-        e_start_time__year__lte=year,
-        e_end_time__year__gte=year,
-    )
-
-    output = ", ".join([q.e_title for q in archive_application_list])
-    return HttpResponse(output)
+class DetailView(generic.DetailView):
+    model = Application
+    template_name = "CogEditor/detail.html"
 
 
-def full_archive(request):
-    archive_application_list = Application.objects.all()
-    output = ", ".join([q.e_title for q in archive_application_list])
-    return HttpResponse(output)
+class ArchiveByYearMonthView(generic.ListView):
+    template_name = "CogEditor/archive_list.html"
+    context_object_name = "application_list"
+
+    def get_queryset(self):
+        year = self.kwargs["year"]
+        month = self.kwargs["month"]
+
+        # Получаем заявки, у которых есть хотя бы одно событие
+        # в указанном году и месяце
+        return (
+            Application.objects.filter(
+                event_schedule__start__year=year,
+                event_schedule__start__month=month,
+            )
+            .distinct()
+            .order_by("subm_date")
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["year"] = self.kwargs["year"]
+        context["month"] = self.kwargs["month"]
+        return context
 
 
-def application_detail(request, id):
-    application = Application.objects.get(pk=id)
-    output = application.e_title
-    return HttpResponse(output)
+class ArchiveByYearView(generic.ListView):
+    template_name = "CogEditor/archive_list.html"
+    context_object_name = "application_list"
+
+    def get_queryset(self):
+        year = self.kwargs["year"]
+        return (
+            Application.objects.filter(event_schedule__start__year=year)
+            .distinct()
+            .order_by("subm_date")
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["year"] = self.kwargs["year"]
+        return context
 
 
-def organizer_events(request, id):
-    employee = Employee.objects.get(pk=id)
-    application_list = Application.objects.filter(organizer=employee)
-    output = ", ".join([q.e_title for q in application_list])
-    return HttpResponse(output)
+class FullArchiveView(generic.ListView):
+    template_name = "CogEditor/archive_list.html"
+    context_object_name = "application_list"
+    queryset = Application.objects.all().order_by("-subm_date")
+    paginate_by = 20
+
+
+class OrganizerEventsView(generic.ListView):
+    template_name = "CogEditor/organizer_events.html"
+    context_object_name = "application_list"
+
+    def get_queryset(self):
+        organizer = get_object_or_404(Employee, pk=self.kwargs["id"])
+        return Application.objects.filter(organizer=organizer).order_by(
+            "-subm_date"
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["organizer"] = get_object_or_404(
+            Employee, pk=self.kwargs["id"]
+        )
+        return context
