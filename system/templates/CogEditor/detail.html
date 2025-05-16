@@ -1,134 +1,141 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <div class="container mt-4">
-        <h1 class="mb-4">Детальная информация о заявке</h1>
-        
-        <div class="card">
-            <div class="card-header bg-primary text-white">
-                <h2>{{ application.e_title }}</h2>
+<div class="container mt-4">
+    <h1 class="mb-4">Детальная информация о заявке</h1>
+
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h2>{{ application.e_title }}</h2>
+        </div>
+        <div class="card-body">
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h4 class="card-title">Основная информация</h4>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <strong>Дата подачи:</strong> {{ application.subm_date|date:"Y-m-d H:i" }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Источник заявки:</strong> {{ application.application_source|default:"Не указано" }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Формат мероприятия:</strong> {{ application.e_format|default:"Не указано" }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Количество участников:</strong> {{ application.number_of_participants }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Статус:</strong>
+                            <span class="badge 
+                            {% if application.status.status == 'Согласовано' %}bg-success
+                            {% elif application.status.status == 'Не согласовано' %}bg-danger
+                            {% elif application.status.status == 'Направлена на доработку' %}bg-warning
+                            {% else %}bg-secondary{% endif %}">
+                                {{ application.status }}
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-md-6">
+                    <h4 class="card-title">Организационная информация</h4>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <strong>Организатор:</strong> {{ application.organizer }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Ответственный сотрудник:</strong> {{ application.organizer_employee|default:"Не указан" }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Приказ на мероприятие:</strong> {{ application.order|default:"Отсутствует" }}
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <div class="card-body">
-                <div class="row mb-4">
-                    <div class="col-md-6">
-                        <h4 class="card-title">Основная информация</h4>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">
-                                <strong>Дата подачи:</strong> {{ application.subm_date|date:"Y-m-d H:i" }}
-                            </li>
-                            <li class="list-group-item">
-                                <strong>Источник заявки:</strong> {{ application.application_source|default:"Не указано" }}
-                            </li>
-                            <li class="list-group-item">
-                                <strong>Формат мероприятия:</strong> {{ application.e_format|default:"Не указано" }}
-                            </li>
-                            <li class="list-group-item">
-                                <strong>Количество участников:</strong> {{ application.number_of_participants }}
-                            </li>
-                            <li class="list-group-item">
-                                <strong>Статус:</strong> <span class="badge bg-secondary">{{ application.status }}</span>
-                            </li>
-                        </ul>
-                    </div>
-                    
-                    <div class="col-md-6">
-                        <h4 class="card-title">Организационная информация</h4>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">
-                                <strong>Организатор:</strong> {{ application.organizer }}
-                            </li>
-                            <li class="list-group-item">
-                                <strong>Ответственный сотрудник:</strong> {{ application.organizer_employee|default:"Не указан" }}
-                            </li>
-                            <li class="list-group-item">
-                                <strong>Приказ на мероприятие:</strong> {{ application.order|default:"Не указан" }}
-                            </li>
-                        </ul>
+
+            <div class="mb-4">
+                <h4>Описание мероприятия</h4>
+                <div class="card">
+                    <div class="card-body">
+                        {{ application.e_description|default:"Описание отсутствует"|linebreaks }}
                     </div>
                 </div>
-                
-                <div class="mb-4">
-                    <h4>Описание мероприятия</h4>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h4>Время монтажа/демонтажа</h4>
                     <div class="card">
                         <div class="card-body">
-                            {{ application.e_description|default:"Описание отсутствует" }}
+                            {{ application.installation_deinstallation|default:"Не указано" }}
                         </div>
                     </div>
                 </div>
-                
-                <div class="row mb-4">
-                    <div class="col-md-6">
-                        <h4>Время монтажа/демонтажа</h4>
-                        <div class="card">
-                            <div class="card-body">
-                                {{ application.installation_deinstallation|default:"Не указано" }}
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-6">
-                        <h4>Время проведения</h4>
-                        <div class="card">
-                            <div class="card-body">
-                                {% if application.event_schedule.all %}
-                                    <ul>
-                                        {% for schedule in application.event_schedule.all %}
-                                            <li>{{ schedule }}</li>
-                                        {% endfor %}
-                                    </ul>
-                                {% else %}
-                                    Не указано
-                                {% endif %}
-                            </div>
+
+                <div class="col-md-6">
+                    <h4>Время проведения</h4>
+                    <div class="card">
+                        <div class="card-body">
+                            {% if application.event_schedule.all %}
+                            <ul style="margin-bottom: 0%;">
+                                {% for schedule in application.event_schedule.all %}
+                                <li>{{ schedule }}</li>
+                                {% endfor %}
+                            </ul>
+                            {% else %}
+                            Не указано
+                            {% endif %}
                         </div>
                     </div>
                 </div>
-                
-                <div class="row mb-4">
-                    <div class="col-md-6">
-                        <h4>Роли участников</h4>
-                        <div class="card">
-                            <div class="card-body">
-                                {% if application.roles.all %}
-                                    <ul>
-                                        {% for role in application.roles.all %}
-                                            <li>{{ role }}</li>
-                                        {% endfor %}
-                                    </ul>
-                                {% else %}
-                                    Роли не указаны
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-6">
-                        <h4>Технические требования</h4>
-                        <div class="card">
-                            <div class="card-body">
-                                {% if application.requires_technical_support %}
-                                    <p><strong>Требуется техническое сопровождение:</strong> Да</p>
-                                    <p><strong>Дата обучения работе со звуком:</strong> 
-                                        {{ application.audio_training_date|date:"Y-m-d"|default:"Не указана" }}
-                                    </p>
-                                    <p><strong>Технические требования:</strong></p>
-                                    {{ application.technical_requirements|default:"Не указаны" }}
-                                {% else %}
-                                    Техническое сопровождение не требуется
-                                {% endif %}
-                            </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h4>Роли участников</h4>
+                    <div class="card">
+                        <div class="card-body">
+                            {% if application.roles.all %}
+                            <ul style="margin-bottom: 0%;">
+                                {% for role in application.roles.all %}
+                                <li>{{ role }}</li>
+                                {% endfor %}
+                            </ul>
+                            {% else %}
+                            Роли не указаны
+                            {% endif %}
                         </div>
                     </div>
                 </div>
-                
-                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                    <a href="{% url 'CogEditor:index' %}" class="btn btn-primary">Назад к списку</a>
+
+                <div class="col-md-6">
+                    <h4>Технические требования</h4>
+                    <div class="card">
+                        <div class="card-body">
+                            {% if application.requires_technical_support %}
+                            <p><strong>Требуется техническое сопровождение:</strong> Да</p>
+                            <p><strong>Дата обучения работе со звуком:</strong>
+                                {{ application.audio_training_date|date:"Y-m-d"|default:"Не указана" }}
+                            </p>
+                            <p><strong>Технические требования:</strong></p>
+                            {{ application.technical_requirements|default:"Не указаны" }}
+                            {% else %}
+                            Техническое сопровождение не требуется
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <a href="{% url 'CogEditor:index' %}" class="btn btn-primary">Назад к списку</a>
             </div>
         </div>
     </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 {% endblock %}
