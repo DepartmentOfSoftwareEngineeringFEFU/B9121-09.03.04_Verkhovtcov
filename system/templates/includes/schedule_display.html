@@ -1,0 +1,22 @@
+{% if schedule %}
+    {% for item in schedule|slice:":2" %}
+    <div class="schedule-item">
+        {% if item.start|date:"d.m.Y" == item.end|date:"d.m.Y" %}
+            {# Событие в один день #}
+            {{ item.start|date:"d.m.Y" }}<br>
+            {{ item.start|date:"H:i" }}–{{ item.end|date:"H:i" }}
+        {% else %}
+            {# Событие на несколько дней #}
+            {{ item.start|date:"d.m.Y H:i" }}<br>
+            –<br>
+            {{ item.end|date:"d.m.Y H:i" }}
+        {% endif %}
+    </div>
+    {% if not forloop.last %}<hr class="my-1">{% endif %}
+    {% endfor %}
+    {% if schedule.count > 2 %}
+    <span class="badge bg-info mt-1">+{{ schedule.count|add:"-2" }} ещё</span>
+    {% endif %}
+{% else %}
+    <span class="text-muted">Не указано</span>
+{% endif %}

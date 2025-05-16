@@ -11,108 +11,10 @@
 
     {% if application_list %}
     <div class="table-responsive">
-        <table class="table table-striped table-hover align-middle">
-            <thead class="table-dark">
-                <tr>
-                    <th>Название</th>
-                    <th class="text-center">Дата подачи</th>
-                    <th class="text-center">Время проведения</th>
-                    <th class="text-center">Статус</th>
-                    <th class="text-center">Действия</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for application in application_list %}
-                <tr>
-                    <td>
-                        <a href="{% url 'CogEditor:detail' application.id %}" class="text-decoration-none fw-bold">
-                            {{ application.e_title }}
-                        </a>
-                        {% if application.e_description %}
-                        <div class="text-muted small mt-1">
-                            {{ application.e_description|truncatechars:100 }}
-                        </div>
-                        {% endif %}
-                    </td>
-                    <td class="text-center">
-                        {{ application.subm_date|date:"d.m.Y" }}
-                    </td>
-                    <td class="text-center">
-                        {% if application.event_schedule.all %}
-                        {% for schedule in application.event_schedule.all|slice:":2" %}
-                        <div class="schedule-item">
-                            {% if schedule.start|date:"d.m.Y" == schedule.end|date:"d.m.Y" %}
-                            {# Событие в один день #}
-                            {{ schedule.start|date:"d.m.Y" }}<br>
-                            {{ schedule.start|date:"H:i" }}–{{ schedule.end|date:"H:i" }}
-                            {% else %}
-                            {# Событие на несколько дней #}
-                            {{ schedule.start|date:"d.m.Y H:i" }}<br>
-                            –<br>
-                            {{ schedule.end|date:"d.m.Y H:i" }}
-                            {% endif %}
-                        </div>
-                        {% if not forloop.last %}
-                        <hr class="my-1">{% endif %}
-                        {% endfor %}
-                        {% if application.event_schedule.count > 2 %}
-                        <span class="badge bg-info mt-1">+{{ application.event_schedule.count|add:"-2" }} ещё</span>
-                        {% endif %}
-                        {% else %}
-                        <span class="text-muted">Не указано</span>
-                        {% endif %}
-                    </td>
-                    <td class="text-center">
-                        <span class="badge 
-                            {% if application.status.status == 'Согласовано' %}bg-success
-                            {% elif application.status.status == 'Не согласовано' %}bg-danger
-                            {% elif application.status.status == 'Направлена на доработку' %}bg-warning
-                            {% else %}bg-secondary{% endif %}">
-                            {{ application.status }}
-                        </span>
-                    </td>
-                    <td class="text-center">
-                        <a href="{% url 'CogEditor:detail' application.id %}" class="btn btn-sm btn-outline-primary"
-                            title="Подробнее">
-                            <i class="bi bi-eye"></i>
-                        </a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        {% include "includes/application_table.html" with hide_format=True %}
     </div>
 
-    <!-- Пагинация -->
-    {% if is_paginated %}
-    <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center mt-4">
-            {% if page_obj.has_previous %}
-            <li class="page-item">
-                <a class="page-link" href="?page=1">&laquo; Первая</a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
-            </li>
-            {% endif %}
-
-            <li class="page-item disabled">
-                <span class="page-link">
-                    Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
-                </span>
-            </li>
-
-            {% if page_obj.has_next %}
-            <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Следующая</a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Последняя &raquo;</a>
-            </li>
-            {% endif %}
-        </ul>
-    </nav>
-    {% endif %}
+    {% include "includes/pagination.html" %}
 
     {% else %}
     <div class="alert alert-info mt-4" role="alert">
@@ -126,23 +28,4 @@
         </a>
     </div>
 </div>
-
-<style>
-    .schedule-item {
-        font-size: 0.9rem;
-        line-height: 1.3;
-    }
-    
-    .schedule-item hr {
-        margin: 0.25rem 0;
-        opacity: 0.2;
-    }
-    
-    @media (max-width: 768px) {
-        .schedule-item {
-            font-size: 0.85rem;
-        }
-    }
-</style>
-
 {% endblock %}

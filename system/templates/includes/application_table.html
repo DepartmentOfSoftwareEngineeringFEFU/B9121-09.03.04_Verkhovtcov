@@ -1,0 +1,85 @@
+{% load static %}
+
+<table class="table table-striped table-hover align-middle">
+    <thead class="table-dark">
+        <tr>
+            {% if not hide_title %}<th class="text-center">Название</th>{% endif %}
+            {% if not hide_submission_date %}<th class="text-center">Дата подачи</th>{% endif %}
+            {% if not hide_schedule %}<th class="text-center">Время проведения</th>{% endif %}
+            {% if not hide_format %}<th class="text-center">Формат</th>{% endif %}
+            {% if not hide_organizer %}<th class="text-center">Организатор</th>{% endif %}
+            {% if not hide_status %}<th class="text-center">Статус</th>{% endif %}
+            {% if not hide_actions %}<th class="text-center">Действия</th>{% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for application in application_list %}
+        <tr>
+            {% if not hide_title %}
+            <td>
+                <a href="{% url 'CogEditor:detail' application.id %}" class="text-decoration-none fw-bold">
+                    {{ application.e_title }}
+                </a>
+                {% if not hide_description and application.e_description %}
+                <div class="text-muted small mt-1">
+                    {{ application.e_description|truncatechars:100 }}
+                </div>
+                {% endif %}
+            </td>
+            {% endif %}
+            
+            {% if not hide_submission_date %}
+            <td class="text-center">
+                {{ application.subm_date|date:"d.m.Y H:i" }}
+            </td>
+            {% endif %}
+            
+            {% if not hide_schedule %}
+            <td class="text-center">
+                {% include "includes/schedule_display.html" with schedule=application.event_schedule.all %}
+            </td>
+            {% endif %}
+            
+            {% if not hide_format %}
+            <td class="text-center">
+                {{ application.e_format|default:"Не указан" }}
+            </td>
+            {% endif %}
+            
+            {% if not hide_organizer %}
+            <td class="text-center">
+                {{ application.organizer }}
+            </td>
+            {% endif %}
+            
+            {% if not hide_status %}
+            <td class="text-center">
+                <span class="badge 
+                    {% if application.status.status == 'Согласовано' %}bg-success
+                    {% elif application.status.status == 'Не согласовано' %}bg-danger
+                    {% elif application.status.status == 'Направлена на доработку' %}bg-warning
+                    {% else %}bg-secondary{% endif %}">
+                    {{ application.status }}
+                </span>
+            </td>
+            {% endif %}
+            
+            {% if not hide_actions %}
+            <td class="text-center">
+                <a href="{% url 'CogEditor:detail' application.id %}" 
+                   class="btn btn-sm btn-outline-primary"
+                   title="Подробнее">
+                    <i class="bi bi-eye"></i>
+                </a>
+            </td>
+            {% endif %}
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="{% if hide_actions %}7{% else %}8{% endif %}" class="text-center py-4">
+                {% if empty_message %}{{ empty_message }}{% else %}Нет доступных заявок{% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
