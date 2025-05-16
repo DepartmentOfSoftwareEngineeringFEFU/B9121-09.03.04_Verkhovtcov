@@ -11,74 +11,90 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     {% block extra_css %}
     <style>
-        .rules-container {
-            padding: 20px;
+        /* Общие стили таблиц */
+        .table-container {
+            margin-bottom: 2rem;
         }
 
-        .rule-accordion {
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-
-        .accordion-button {
-            width: 100%;
-            padding: 15px;
-            text-align: left;
-            background: #f8f9fa;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .accordion-button:hover {
-            background: #e9ecef;
-        }
-
-        .accordion-content {
-            padding: 0 15px;
-            max-height: 0;
+        .table-responsive {
+            border-radius: 0.5rem;
             overflow: hidden;
-            transition: max-height 0.3s ease-out;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
         }
 
-        .accordion-content.active {
-            padding: 15px;
-            max-height: 1000px;
-        }
-
-        .rule-name {
-            font-weight: 600;
-        }
-
-        .rule-info {
-            background: #f8f9fa;
-            padding: 10px;
-            margin-bottom: 15px;
-            border-radius: 4px;
-        }
-
-        .summary-info {
-            display: flex;
-            gap: 20px;
-            margin-bottom: none;
-        }
-
-        .nav-link {
-            position: relative;
-            transition: all 0.3s;
-        }
-
-        .nav-link:hover:after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
+        .table {
+            margin-bottom: 0;
             width: 100%;
-            height: 2px;
-            background-color: white;
+        }
+
+        .table thead th {
+            background-color: #343a40;
+            color: white;
+            font-weight: 500;
+            vertical-align: middle;
+            padding: 1rem;
+        }
+
+        .table tbody td {
+            vertical-align: middle;
+            padding: 0.75rem 1rem;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: rgba(0, 0, 0, 0.03);
+        }
+
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+
+        /* Стили для статусов */
+        .badge-status {
+            font-size: 0.85em;
+            padding: 0.35em 0.65em;
+            font-weight: 500;
+        }
+
+        .bg-success {
+            background-color: #28a745 !important;
+        }
+
+        .bg-danger {
+            background-color: #dc3545 !important;
+        }
+
+        .bg-secondary {
+            background-color: #6c757d !important;
+        }
+
+        .bg-info {
+            background-color: #17a2b8 !important;
+        }
+
+        /* Стили для ссылок в таблицах */
+        .table a {
+            color: #1a73e8;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .table a:hover {
+            color: #0d47a1;
+            text-decoration: underline;
+        }
+
+        /* Пагинация */
+        .pagination {
+            margin-top: 1.5rem;
+        }
+
+        .page-item.active .page-link {
+            background-color: #1a73e8;
+            border-color: #1a73e8;
+        }
+
+        .page-link {
+            color: #1a73e8;
         }
     </style>
     {% endblock %}
