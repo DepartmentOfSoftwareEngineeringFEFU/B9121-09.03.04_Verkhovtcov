@@ -25,8 +25,7 @@
                 {% for application in application_list %}
                 <tr>
                     <td>
-                        <a href="{% url 'CogEditor:detail' application.id %}" 
-                           class="text-decoration-none fw-bold">
+                        <a href="{% url 'CogEditor:detail' application.id %}" class="text-decoration-none fw-bold">
                             {{ application.e_title }}
                         </a>
                         {% if application.e_description %}
@@ -40,28 +39,28 @@
                     </td>
                     <td class="text-center">
                         {% if application.event_schedule.all %}
-                            {% for schedule in application.event_schedule.all|slice:":2" %}
-                                <div>{{ schedule.start|date:"d.m.Y H:i" }}–{{ schedule.end|date:"H:i" }}</div>
-                            {% endfor %}
-                            {% if application.event_schedule.count > 2 %}
-                                <span class="badge bg-info">+{{ application.event_schedule.count|add:"-2" }} ещё</span>
-                            {% endif %}
+                        {% for schedule in application.event_schedule.all|slice:":2" %}
+                        <div>{{ schedule.start|date:"d.m.Y H:i" }}–{{ schedule.end|date:"H:i" }}</div>
+                        {% endfor %}
+                        {% if application.event_schedule.count > 2 %}
+                        <span class="badge bg-info">+{{ application.event_schedule.count|add:"-2" }} ещё</span>
+                        {% endif %}
                         {% else %}
-                            <span class="text-muted">Не указано</span>
+                        <span class="text-muted">Не указано</span>
                         {% endif %}
                     </td>
                     <td class="text-center">
                         <span class="badge 
-                            {% if application.status.name == 'Согласовано' %}bg-success
-                            {% elif application.status.name == 'Отклонено' %}bg-danger
+                            {% if application.status.status == 'Согласовано' %}bg-success
+                            {% elif application.status.status == 'Не согласовано' %}bg-danger
+                            {% elif application.status.status == 'Направлена на доработку' %}bg-warning
                             {% else %}bg-secondary{% endif %}">
                             {{ application.status }}
                         </span>
                     </td>
                     <td class="text-center">
-                        <a href="{% url 'CogEditor:detail' application.id %}" 
-                           class="btn btn-sm btn-outline-primary"
-                           title="Подробнее">
+                        <a href="{% url 'CogEditor:detail' application.id %}" class="btn btn-sm btn-outline-primary"
+                            title="Подробнее">
                             <i class="bi bi-eye"></i>
                         </a>
                     </td>
