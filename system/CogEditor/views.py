@@ -7,6 +7,8 @@ from CogEditor.models import StructuralUnit
 class IndexView(generic.ListView):
     template_name = "CogEditor/index.html"
     context_object_name = "latest_application_list"
+    paginate_by = 10
+
 
     def get_queryset(self):
         """Возвращает 5 последних заявок"""
@@ -21,7 +23,7 @@ class DetailView(generic.DetailView):
 class ArchiveByYearView(generic.ListView):
     template_name = "CogEditor/archive_list.html"
     context_object_name = "application_list"
-    paginate_by = 20
+    paginate_by = 10
 
     def get_queryset(self):
         year = self.kwargs["year"]
@@ -42,7 +44,7 @@ class ArchiveByYearView(generic.ListView):
 class ArchiveByYearMonthView(generic.ListView):
     template_name = "CogEditor/archive_list.html"
     context_object_name = "application_list"
-    paginate_by = 20
+    paginate_by = 10
 
     def get_queryset(self):
         year = self.kwargs["year"]
@@ -68,7 +70,7 @@ class ArchiveByYearMonthView(generic.ListView):
 class OrganizerEventsView(generic.ListView):
     template_name = "CogEditor/organizer_events.html"
     context_object_name = "application_list"
-    paginate_by = 20
+    paginate_by = 10
 
     def get_queryset(self):
         organizer_id = self.kwargs["id"]
@@ -88,4 +90,4 @@ class FullArchiveView(generic.ListView):
     template_name = "CogEditor/archive_list.html"
     context_object_name = "application_list"
     queryset = Application.objects.all().order_by("-subm_date")
-    paginate_by = 20
+    paginate_by = 10
