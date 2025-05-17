@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container mt-4">
+<div class="">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>Заявки организатора: <span class="text-primary">{{ organizer.name }}</span></h1>
         <a href="{% url 'CogEditor:archive' %}" class="btn btn-outline-secondary">
@@ -10,7 +10,7 @@
     </div>
 
     {% if application_list %}
-    <div class="table-responsive">
+    <div class="table-responsive-xl table-design">
         {% include "includes/application_table.html" with hide_format=True %}
     </div>
 

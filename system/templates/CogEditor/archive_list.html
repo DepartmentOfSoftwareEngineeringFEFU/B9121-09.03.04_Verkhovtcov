@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container mt-4">
+<div class="">
     <h1 class="mb-4">
         {% if year and month %}
             Архив мероприятий за {{ month|stringformat:"02d" }}.{{ year }}
@@ -13,7 +13,7 @@
     </h1>
 
     {% if application_list %}
-    <div class="table-responsive">
+    <div class="table-responsive-xl table-design">
         {% include "includes/application_table.html" with hide_actions=True %}
     </div>
 
