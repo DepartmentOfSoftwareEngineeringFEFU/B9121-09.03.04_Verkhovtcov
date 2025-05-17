@@ -1,7 +1,6 @@
-from CogEditor.models import Application, Employee
+from CogEditor.models import Application, Employee, StructuralUnit
 from django.shortcuts import get_object_or_404
 from django.views import generic
-from CogEditor.models import StructuralUnit
 
 
 class IndexView(generic.ListView):

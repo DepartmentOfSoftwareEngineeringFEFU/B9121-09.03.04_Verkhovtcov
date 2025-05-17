@@ -16,14 +16,8 @@
             margin-bottom: 2rem;
         }
 
-        .table-responsive {
-            border-radius: 0.5rem;
-            overflow: hidden;
-            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-        }
-
         .table {
-            margin-bottom: 0;
+            margin-bottom: 0.5rem;
             width: 100%;
         }
 
@@ -96,6 +90,127 @@
         .page-link {
             color: #1a73e8;
         }
+
+
+        .rules-table {
+            --bs-table-bg: transparent;
+            --bs-table-striped-bg: rgba(0, 0, 0, 0.02);
+            --bs-table-hover-bg: rgba(0, 0, 0, 0.03);
+        }
+
+        .rules-table .table-warning {
+            --bs-table-bg: #fff8e1;
+            --bs-table-hover-bg: #ffe0b2;
+        }
+
+        .accordion-button:not(.collapsed) {
+            background-color: rgba(13, 110, 253, 0.1);
+        }
+
+        .rule-statistics {
+            font-size: 0.9rem;
+        }
+
+        /* Кастомизация таблиц в CogSolver */
+        /* Исправление для скругленных углов таблицы */
+        .table-design {
+            border-radius: 0.5rem;
+            /* Это важно для сохранения скругленных углов */
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+
+        /* Для responsive таблиц */
+        .table-responsive-xl {
+            border-radius: 0.5rem;
+        }
+
+        /* Для самой таблицы */
+        .table {
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-bottom: 1rem;
+        }
+
+        /* Скругление углов для первой и последней ячеек в заголовке */
+        .table thead tr:first-child th:first-child {
+            border-top-left-radius: 0.5rem;
+        }
+
+        .table thead tr:first-child th:last-child {
+            border-top-right-radius: 0.5rem;
+        }
+
+        /* Скругление углов для последней строки */
+        .table tbody tr:last-child td:first-child {
+            border-bottom-left-radius: 0.5rem;
+        }
+
+        .table tbody tr:last-child td:last-child {
+            border-bottom-right-radius: 0.5rem;
+        }
+
+        /* Стиль для измененных строк */
+        .table-warning {
+            --bs-table-bg: rgba(255, 193, 7, 0.1);
+            --bs-table-hover-bg: rgba(255, 193, 7, 0.2);
+        }
+
+        /* Стиль для пустых таблиц */
+        .text-muted {
+            color: #6c757d !important;
+        }
+
+        @media (max-width: 992px) {
+
+            .container,
+            .container-fluid {
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+                margin-left: 1.5rem !important;
+                margin-right: 1.5rem !important;
+                max-width: calc(100% - 3rem) !important;
+            }
+
+            /* Для таблиц и других широких элементов */
+            .table-responsive-lg {
+                margin-left: 5px;
+                margin-right: 5px;
+                width: calc(100% - 10px);
+            }
+
+        }
+
+        @media (max-width: 768px) {
+
+            .container,
+            .container-fluid {
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+                margin-left: 1rem !important;
+                margin-right: 1rem !important;
+                max-width: calc(100% - 2rem) !important;
+            }
+
+            /* Для таблиц и других широких элементов */
+            .table-responsive-lg {
+                margin-left: 5px;
+                margin-right: 5px;
+                width: calc(100% - 10px);
+            }
+
+            .table tbody td,
+            .table thead th {
+                padding: 0.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+
+            .table tbody td,
+            .table thead th {
+                padding: 0.25rem;
+            }
+        }
     </style>
     {% endblock %}
 </head>
@@ -103,7 +218,7 @@
 <body>
     {% include "includes/header.html" %}
 
-    <div class="container mt-4">
+    <div class="container mt-4 mr-2">
         {% block content %}
 
         {% endblock %}

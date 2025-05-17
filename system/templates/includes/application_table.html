@@ -21,7 +21,7 @@
                     {{ application.e_title }}
                 </a>
                 {% if not hide_description and application.e_description %}
-                <div class="text-muted small mt-1">
+                <div class="text-muted small mt-1 d-none d-md-block">
                     {{ application.e_description|truncatechars:100 }}
                 </div>
                 {% endif %}

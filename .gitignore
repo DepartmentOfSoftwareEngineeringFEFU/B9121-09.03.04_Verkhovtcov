@@ -157,6 +157,15 @@ dmypy.json
 # pytype static type analyzer
 .pytype/
 
+# Django staticfiles
+staticfiles
+
+# openssl secret files
+cert.pem
+key.pem
+cert.crt
+cert.key
+
 # Cython debug symbols
 cython_debug/
 
