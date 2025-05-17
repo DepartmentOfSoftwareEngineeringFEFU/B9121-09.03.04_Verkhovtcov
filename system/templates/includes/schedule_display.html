@@ -8,7 +8,6 @@
         {% else %}
             {# Событие на несколько дней #}
             {{ item.start|date:"d.m.Y H:i" }}<br>
-            –<br>
             {{ item.end|date:"d.m.Y H:i" }}
         {% endif %}
     </div>

@@ -17,7 +17,7 @@
         }
 
         .table {
-            margin-bottom: 0;
+            margin-bottom: 0.5rem;
             width: 100%;
         }
 
@@ -112,10 +112,41 @@
         }
 
         /* Кастомизация таблиц в CogSolver */
+        /* Исправление для скругленных углов таблицы */
         .table-design {
-            margin-bottom: 1.5rem;
             border-radius: 0.5rem;
+            /* Это важно для сохранения скругленных углов */
             box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+
+        /* Для responsive таблиц */
+        .table-responsive-xl {
+            border-radius: 0.5rem;
+        }
+
+        /* Для самой таблицы */
+        .table {
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-bottom: 1rem;
+        }
+
+        /* Скругление углов для первой и последней ячеек в заголовке */
+        .table thead tr:first-child th:first-child {
+            border-top-left-radius: 0.5rem;
+        }
+
+        .table thead tr:first-child th:last-child {
+            border-top-right-radius: 0.5rem;
+        }
+
+        /* Скругление углов для последней строки */
+        .table tbody tr:last-child td:first-child {
+            border-bottom-left-radius: 0.5rem;
+        }
+
+        .table tbody tr:last-child td:last-child {
+            border-bottom-right-radius: 0.5rem;
         }
 
         /* Стиль для измененных строк */
@@ -129,22 +160,55 @@
             color: #6c757d !important;
         }
 
+        @media (max-width: 992px) {
+
+            .container,
+            .container-fluid {
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+                margin-left: 1.5rem !important;
+                margin-right: 1.5rem !important;
+                max-width: calc(100% - 3rem) !important;
+            }
+
+            /* Для таблиц и других широких элементов */
+            .table-responsive-lg {
+                margin-left: 5px;
+                margin-right: 5px;
+                width: calc(100% - 10px);
+            }
+
+        }
+
         @media (max-width: 768px) {
 
             .container,
             .container-fluid {
                 padding-left: 0 !important;
                 padding-right: 0 !important;
-                margin-left: 0 !important;
-                margin-right: 0 !important;
-                max-width: 100% !important;
+                margin-left: 1rem !important;
+                margin-right: 1rem !important;
+                max-width: calc(100% - 2rem) !important;
             }
 
-            /* Для сохранения отступов у контента */
-            .container>*,
-            .container-fluid>* {
-                padding-left: 15px;
-                padding-right: 15px;
+            /* Для таблиц и других широких элементов */
+            .table-responsive-lg {
+                margin-left: 5px;
+                margin-right: 5px;
+                width: calc(100% - 10px);
+            }
+
+            .table tbody td,
+            .table thead th {
+                padding: 0.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+
+            .table tbody td,
+            .table thead th {
+                padding: 0.25rem;
             }
         }
     </style>
@@ -154,7 +218,7 @@
 <body>
     {% include "includes/header.html" %}
 
-    <div class="container mt-4">
+    <div class="container mt-4 mr-2">
         {% block content %}
 
         {% endblock %}

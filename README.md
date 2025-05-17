@@ -22,3 +22,8 @@
         localhost/application/<int:id>
     6. Получение перечня организованных мероприятий по id сотрудника
         localhost/organizer/<int:id>/events/
+
+## Запуск
+```bash
+python manage.py runserver 192.168.1.37:8050 --insecure
+```
