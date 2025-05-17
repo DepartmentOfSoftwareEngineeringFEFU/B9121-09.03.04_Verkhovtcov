@@ -96,6 +96,45 @@
         .page-link {
             color: #1a73e8;
         }
+
+
+        .rules-table {
+            --bs-table-bg: transparent;
+            --bs-table-striped-bg: rgba(0, 0, 0, 0.02);
+            --bs-table-hover-bg: rgba(0, 0, 0, 0.03);
+        }
+
+        .rules-table .table-warning {
+            --bs-table-bg: #fff8e1;
+            --bs-table-hover-bg: #ffe0b2;
+        }
+
+        .accordion-button:not(.collapsed) {
+            background-color: rgba(13, 110, 253, 0.1);
+        }
+
+        .rule-statistics {
+            font-size: 0.9rem;
+        }
+
+        /* Кастомизация таблиц в CogSolver */
+        .table-responsive {
+            margin-bottom: 1.5rem;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+
+        /* Стиль для измененных строк */
+        .table-warning {
+            --bs-table-bg: rgba(255, 193, 7, 0.1);
+            --bs-table-hover-bg: rgba(255, 193, 7, 0.2);
+        }
+
+        /* Стиль для пустых таблиц */
+        .text-muted {
+            color: #6c757d !important;
+        }
     </style>
     {% endblock %}
 </head>

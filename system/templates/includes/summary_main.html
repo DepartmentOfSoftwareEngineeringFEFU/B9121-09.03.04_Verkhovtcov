@@ -1,4 +1,28 @@
-<div class="summary-info">
-    <p>Всего заявок: <strong>{{ results|length }}</strong></p>
-    <p>Изменения статусов: <strong>{{ changed_count }}</strong></p>
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <h5 class="card-title">Статистика обработки</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Всего заявок
+                        <span class="badge bg-primary rounded-pill">{{ results|length }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Изменения статусов
+                        <span class="badge bg-primary rounded-pill">{{ changed_count }}</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <h5 class="card-title">Статистика по правилам</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Всего правил
+                        <span class="badge bg-primary rounded-pill">{{ rules|length }}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>

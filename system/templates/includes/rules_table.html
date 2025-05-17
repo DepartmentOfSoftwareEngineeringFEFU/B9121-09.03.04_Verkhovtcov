@@ -1,0 +1,47 @@
+<div class="table-responsive">
+    <table class="table table-striped table-hover rules-table">
+        <thead class="table-dark">
+            <tr>
+                {% for column in columns %}
+                <th>{{ column.name }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in results %}
+            <tr class="{% if item.status_changed %}table-warning{% endif %}">
+                <td>{{ item.application.id }}</td>
+                <td>
+                    <a href="{% url 'CogEditor:detail' item.application.id %}" class="text-decoration-none">
+                        {{ item.application.e_title }}
+                    </a>
+                </td>
+                <td>{{ item.application.subm_date|date:"d.m.Y H:i" }}</td>
+                <td>
+                    <span class="badge 
+                        {% if item.current_status.status == 'Согласовано' %}bg-success
+                        {% elif item.current_status.status == 'Не согласовано' %}bg-danger
+                        {% elif item.current_status.status == 'Направлена на доработку' %}bg-warning
+                        {% else %}bg-secondary{% endif %}">
+                        {{ item.current_status }}
+                    </span>
+                </td>
+                <td>
+                    <span class="badge 
+                        {% if item.new_status.status == 'Согласовано' %}bg-success
+                        {% elif item.new_status.status == 'Не согласовано' %}bg-danger
+                        {% elif item.new_status.status == 'Направлена на доработку' %}bg-warning
+                        {% else %}bg-secondary{% endif %}">
+                        {{ item.new_status }}
+                    </span>
+                </td>
+                <td>
+                    <span class="badge {% if item.status_changed %}bg-primary{% else %}bg-light text-dark{% endif %}">
+                        {% if item.status_changed %}Да{% else %}Нет{% endif %}
+                    </span>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
