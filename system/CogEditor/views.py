@@ -48,6 +48,7 @@ class ArchiveByYearMonthView(generic.ListView):
     def get_queryset(self):
         year = self.kwargs["year"]
         month = self.kwargs["month"]
+        # FIXME - при переходе на MySQL отсутствует фильтрация по суффиксу __month
         return (
             Application.objects.filter(
                 event_schedule__start__year=year,
