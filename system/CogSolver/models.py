@@ -15,7 +15,7 @@ class Rule(models.Model):
     )
     description = models.TextField(verbose_name="Описание правила")
     priority = models.IntegerField(
-        default=0,
+        default=1,
         verbose_name="Приоритет выполнения",
     )
     is_active = models.BooleanField(

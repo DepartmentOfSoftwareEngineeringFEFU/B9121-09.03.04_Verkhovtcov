@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
             name='Sources',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(verbose_name='Наименование источника')),
+                ('name', models.CharField(max_length=32, verbose_name='Наименование источника')),
             ],
             options={
                 'verbose_name': 'источник получения заявки',

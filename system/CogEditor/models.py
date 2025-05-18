@@ -241,6 +241,7 @@ class Schedule(models.Model):
 class Sources(models.Model):
     name = models.CharField(
         verbose_name="Наименование источника",
+        max_length=32,
     )
 
     def __str__(self):

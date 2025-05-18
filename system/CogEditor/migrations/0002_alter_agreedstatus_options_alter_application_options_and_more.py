@@ -53,7 +53,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='application',
             name='role',
-            field=models.ForeignKey(default=0, on_delete=django.db.models.deletion.CASCADE, to='CogEditor.participatoryrole', verbose_name='Роль участника мероприятия'),
+            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='CogEditor.participatoryrole', verbose_name='Роль участника мероприятия'),
         ),
         migrations.AlterField(
             model_name='agreedstatus',
