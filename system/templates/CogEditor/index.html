@@ -6,7 +6,7 @@
 
     <h2>Последние 5 заявок</h2>
     <div class="table-responsive-xl table-design">
-        {% include "includes/application_table.html" with application_list=latest_application_list hide_schedule=True hide_format=True hide_actions=True empty_message="Нет доступных заявок" %}
+        {% include "CogEditor/includes/application_table.html" with application_list=latest_application_list hide_schedule=True hide_format=True hide_actions=True empty_message="Нет доступных заявок" %}
     </div>
 </div>
 {% endblock %}
