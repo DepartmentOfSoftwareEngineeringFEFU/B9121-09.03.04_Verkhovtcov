@@ -1,5 +1,8 @@
+from CogEditor.models import Application
+from CogSolver.forms import ApplicationForm
 from CogSolver.models import Rule, RuleEngine
 from django.shortcuts import render
+from django.views.generic.edit import CreateView
 
 
 def rules_report(request):
@@ -48,5 +51,16 @@ def rules_report(request):
     return render(request, "CogSolver/rules_report.html", context)
 
 
-def application_classifier(request):
-    return render(request, "CogSolver/application_classifier.html")
+class ApplicationCreateView(CreateView):
+    model = Application
+    form_class = ApplicationForm
+    template_name = 'CogSolver/application_classifier.html'
+    success_url = '/editor/'  # Прямой путь
+
+    def form_valid(self, form):
+        # Вызываем save() формы (в котором ваша логика)
+        self.object = form.save()
+
+        print("Получена заявка:", self.object)
+
+        return super().form_valid(form)

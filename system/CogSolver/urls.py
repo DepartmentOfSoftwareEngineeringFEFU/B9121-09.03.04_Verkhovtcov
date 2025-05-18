@@ -6,7 +6,7 @@ app_name = "CogSolver"
 
 urlpatterns = [
     path("application_classifier/",
-         views.application_classifier,
+         views.ApplicationCreateView.as_view(),
          name="application_classifier"),
     path("", views.rules_report, name="rules_report"),
 ]
