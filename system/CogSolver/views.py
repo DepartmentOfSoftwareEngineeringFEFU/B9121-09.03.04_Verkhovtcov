@@ -46,3 +46,7 @@ def rules_report(request):
         ],
     }
     return render(request, "CogSolver/rules_report.html", context)
+
+
+def application_classifier(request):
+    return render(request, "CogSolver/application_classifier.html")
