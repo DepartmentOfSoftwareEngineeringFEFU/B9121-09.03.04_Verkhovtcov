@@ -12,6 +12,21 @@
             <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
                 {% csrf_token %}
                 
+                {# Общие ошибки формы #}
+                {% if form.errors %}
+                    <div class="alert alert-danger">
+                        <strong>Ошибка!</strong> Пожалуйста, исправьте следующие ошибки:
+                        <ul>
+                            {% for field, errors in form.errors.items %}
+                                {% for error in errors %}
+                                    <li>{{ field|title }}: {{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+
+
                 <!-- Основная информация -->
                 <div class="row mb-4">
                     <div class="col-md-8">
@@ -32,8 +47,7 @@
                     <div class="col-md-4">
                         <h4 class="mb-3">Организационные данные</h4>
                         {{ form.organizer|as_crispy_field }}
-                        {{ form.organizer_employee|as_crispy_field }}
-                        {{ form.application_source|as_crispy_field }}
+                        {{ form.organizer_employee_name|as_crispy_field }}
                     </div>
                 </div>
                 
@@ -79,7 +93,6 @@
                     </div>
                     <div class="col-md-6">
                         {{ form.order|as_crispy_field }}
-                        {{ form.status|as_crispy_field }}
                     </div>
                 </div>
                 
@@ -87,7 +100,7 @@
                     <button type="submit" class="btn btn-primary px-4">
                         <i class="bi bi-save me-2"></i>Сохранить заявку
                     </button>
-                    <a href="{% url 'application_list' %}" class="btn btn-outline-secondary">
+                    <a href="{% url 'CogEditor:index' %}" class="btn btn-outline-secondary">
                         <i class="bi bi-arrow-left me-2"></i>Отмена
                     </a>
                 </div>
@@ -139,14 +152,5 @@
         }, false);
     })();
     
-    // Инициализация datepicker для поля audio_training_date
-    $(document).ready(function(){
-        $('#id_audio_training_date').datepicker({
-            format: 'dd.mm.yyyy',
-            autoclose: true,
-            todayHighlight: true,
-            language: 'ru'
-        });
-    });
 </script>
 {% endblock %}
