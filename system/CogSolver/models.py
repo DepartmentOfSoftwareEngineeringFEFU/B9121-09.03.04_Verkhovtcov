@@ -83,22 +83,40 @@ class Rule(models.Model):
                 if self.days_threshold is None:
                     return False
 
-                # Получаем все расписания мероприятия
+                # Получаем все даты мероприятий
                 event_schedules = application.event_schedule.all()
-
-                # Если нет расписаний, условие не выполняется
                 if not event_schedules.exists():
                     return False
 
-                # Проверяем все даты начала мероприятий
-                threshold_date = application.subm_date + datetime.timedelta(
+                from django.utils import timezone
+
+                # Преобразуем дату подачи заявки в осознанную (aware) дату,
+                # если необходимо
+                subm_date = application.subm_date
+                if timezone.is_naive(subm_date):
+                    subm_date = timezone.make_aware(subm_date)
+
+                # Вычисляем пороговую дату
+                threshold_date = subm_date + datetime.timedelta(
                     days=self.days_threshold
                 )
-                return all(
-                    threshold_date >= schedule.start
-                    for schedule in event_schedules
-                    if schedule.start is not None
-                )
+
+                # Проверяем все даты мероприятий
+                for schedule in event_schedules:
+                    if schedule.start is None:
+                        continue
+
+                    # Приводим дату мероприятия к тому же типу временной зоны
+                    event_date = schedule.start
+                    if timezone.is_naive(event_date):
+                        event_date = timezone.make_aware(event_date)
+
+                    # Если хотя бы одно мероприятие раньше пороговой даты -
+                    # правило не выполняется
+                    if event_date >= threshold_date:
+                        return False
+
+                return True
 
             elif self.condition_type == "role_check":
                 if not self.role_id.exists():
@@ -143,6 +161,7 @@ class Rule(models.Model):
                 return date_ok and role_ok and text_ok
 
         except (TypeError, ValueError):
+            raise TypeError
             return False
 
         return False
@@ -175,19 +194,23 @@ class Rule(models.Model):
 
 
 class RuleEngine:
+    """Применяет все активные правила к заявке"""
+
     @staticmethod
     def apply_rules_to_application(
         application,
     ):
-        """Применяет все активные правила к заявке"""
         rules = Rule.objects.filter(is_active=True).order_by("-priority")
 
         for rule in rules:
             try:
                 if rule.evaluate(application):
+                    # Возвращаем новый статус и обновляем заявку
+                    application.status = rule.new_status
+                    application.save()
                     return rule.new_status
+
             except Exception as e:
-                # FIXME - не работает логирование
                 logger.error(
                     f"Error evaluating rule {rule.id} for application "
                     f"{application.id}: {str(e)}"

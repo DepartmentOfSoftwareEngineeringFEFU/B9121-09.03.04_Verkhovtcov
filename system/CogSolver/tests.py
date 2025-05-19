@@ -193,6 +193,12 @@ class RuleEngineTest(TestCase):
             priority=1,
         )
 
+        # Меняем дату мероприятия, чтобы правило сработало
+        self.schedule.start = datetime.datetime.now() + datetime.timedelta(
+            days=3
+        )
+        self.schedule.save()
+
         new_status = RuleEngine.apply_rules_to_application(self.application)
         self.assertEqual(new_status, self.status2)
 
