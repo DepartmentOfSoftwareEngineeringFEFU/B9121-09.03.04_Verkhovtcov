@@ -13,7 +13,7 @@ from CogEditor.models import (
 )
 from CogSolver.models import Rule, RuleEngine
 from django.core.exceptions import ValidationError
-from django.test import TestCase
+from django.test import Client, TestCase
 
 
 class RuleModelTest(TestCase):
@@ -221,3 +221,11 @@ class RuleEngineTest(TestCase):
         self.assertEqual(len(results), 1)
         self.assertTrue(results[0]['status_changed'])
         self.assertEqual(results[0]['new_status'], self.status2)
+
+
+class CogSolverViewsTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.status = AgreedStatus.objects.create(
+            status="Тестовый статус", n_stage=1
+        )
