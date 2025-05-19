@@ -105,3 +105,22 @@ class RuleModelTest(TestCase):
         self.application.e_description = "Очень длинное описание " * 10
         self.application.save()
         self.assertFalse(rule.evaluate(self.application))
+
+    def test_combined_rule(self):
+        rule = Rule.objects.create(
+            name="Комбинированное правило",
+            condition_type="combined",
+            days_threshold=2,
+            min_text_length=50,
+            new_status=self.status2,
+            is_active=True,
+        )
+        rule.role_id.add(self.role1)
+
+        # Все условия выполняются
+        self.assertTrue(rule.evaluate(self.application))
+
+        # Нарушаем одно из условий
+        rule.role_id.clear()
+        rule.role_id.add(self.role2)
+        self.assertFalse(rule.evaluate(self.application))
