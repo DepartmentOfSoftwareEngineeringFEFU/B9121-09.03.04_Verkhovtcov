@@ -41,3 +41,19 @@ class ApplicationFormTest(TestCase):
         }
         form = ApplicationForm(data=form_data)
         self.assertTrue(form.is_valid())
+
+    def test_invalid_time(self):
+        tomorrow = timezone.now() + datetime.timedelta(days=1)
+        form_data = {
+            'e_title': 'Тестовое мероприятие',
+            'e_description': 'Тестовое описание',
+            'organizer_employee_name': 'Тестовый сотрудник',
+            'event_date': tomorrow.date(),
+            'event_time_start': datetime.time(12, 0),
+            'event_time_end': datetime.time(10, 0),  # Неправильное время
+            'organizer': self.unit.id,
+            'e_format': self.event_format.id,
+        }
+        form = ApplicationForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertIn('event_time_end', form.errors)
