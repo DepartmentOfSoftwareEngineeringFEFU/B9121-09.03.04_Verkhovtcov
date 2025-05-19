@@ -234,18 +234,3 @@ class CogSolverViewsTest(TestCase):
     def test_rules_report_view(self):
         response = self.client.get(reverse("CogSolver:rules_report"))
         self.assertEqual(response.status_code, 200)
-
-    def test_application_classifier_view(self):
-        response = self.client.get(reverse("CogSolver:application_classifier"))
-        self.assertEqual(response.status_code, 200)
-
-        # Тест POST запроса
-        response = self.client.post(
-            reverse("CogSolver:application_classifier"),
-            {
-                'e_title': 'Тестовое мероприятие',
-                'e_description': 'Тестовое описание',
-                # Добавьте другие обязательные поля формы
-            },
-        )
-        self.assertEqual(response.status_code, 200)  # Или 302 если редирект

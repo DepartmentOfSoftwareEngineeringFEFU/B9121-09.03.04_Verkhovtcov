@@ -107,3 +107,19 @@ class ApplicationViewsTest(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.application.e_title)
+
+    # 7. Тест мероприятий организатора
+    def test_application_classifier_view(self):
+        response = self.client.get(reverse("CogEditor:application_classifier"))
+        self.assertEqual(response.status_code, 200)
+
+        # Тест POST запроса
+        response = self.client.post(
+            reverse("CogEditor:application_classifier"),
+            {
+                'e_title': 'Тестовое мероприятие',
+                'e_description': 'Тестовое описание',
+                # Добавьте другие обязательные поля формы
+            },
+        )
+        self.assertEqual(response.status_code, 200)  # Или 302 если редирект
