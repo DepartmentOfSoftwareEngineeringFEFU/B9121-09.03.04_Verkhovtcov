@@ -42,7 +42,6 @@ def index(request):
         "event_duration",
         "event_schedule__start",
         "event_schedule__end",
-        # Убрали installation_deinstallation, так как их нет в данных
     )
 
     df = pd.DataFrame.from_records(applications)
