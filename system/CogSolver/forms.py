@@ -1,9 +1,10 @@
+import datetime
+
 from bootstrap_datepicker_plus.widgets import DatePickerInput
 from CogEditor.models import (AgreedStatus, Application, Employee,
                               EmployeePosition, Sources, Schedule)
 from django import forms
 from django.utils import timezone
-import datetime
 
 
 class ApplicationForm(forms.ModelForm):
@@ -40,7 +41,6 @@ class ApplicationForm(forms.ModelForm):
         }),
         initial=day_1.date().strftime("%Y-%m-%d")
     )
-    # FIXME
     event_date_end = forms.DateField(
         label="Дата окончания",
         widget=forms.DateInput(attrs={
@@ -60,7 +60,6 @@ class ApplicationForm(forms.ModelForm):
             'format': '%HH:%MM',
         }),
         initial=day_1.time(),
-        input_formats=['%HH:%MM'],
     )
 
     event_time_end = forms.TimeField(
@@ -71,7 +70,6 @@ class ApplicationForm(forms.ModelForm):
         }),
         initial=day_2.time(),
         required=False,
-        input_formats=['%HH:%MM'],
     )
 
     event_all_day = forms.BooleanField(
@@ -146,10 +144,9 @@ class ApplicationForm(forms.ModelForm):
             cleaned_data['event_end'] = datetime.datetime.combine(date_end, datetime.time.max)
         else:
             event_date = cleaned_data.get('event_date')
-            # FIXME time_end, time_start is none
 
-            time_start = cleaned_data.get('Event_Time_Start')
-            time_end = cleaned_data.get('Event_Time_End')
+            time_start = cleaned_data.get('event_time_start')
+            time_end = cleaned_data.get('event_time_end')
             
             if not event_date:
                 raise forms.ValidationError("Необходимо указать дату мероприятия")
@@ -159,10 +156,8 @@ class ApplicationForm(forms.ModelForm):
 
             if time_start >= time_end:
                 raise forms.ValidationError("Время начала не может быть позже времени окончания")
-                
             cleaned_data['event_start'] = datetime.datetime.combine(event_date, time_start)
             cleaned_data['event_end'] = datetime.datetime.combine(event_date, time_end)
-            print(cleaned_data['event_start'], cleaned_data['event_end'])
         # Гарантируем установку обязательных полей
         if not cleaned_data.get('subm_date'):
             cleaned_data['subm_date'] = timezone.now()
@@ -184,11 +179,7 @@ class ApplicationForm(forms.ModelForm):
 
         if not instance.application_source_id:
             instance.application_source = Sources.objects.get(name="Сайт")
-
-        # Удаляем старые расписания
-        instance.event_schedule.all().delete()
         
-        # Создаем новое расписание
         schedule = Schedule.objects.create(
             start=self.cleaned_data['event_start'],
             end=self.cleaned_data['event_end'],
