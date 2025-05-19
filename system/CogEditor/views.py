@@ -8,7 +8,6 @@ class IndexView(generic.ListView):
     context_object_name = "latest_application_list"
     paginate_by = 10
 
-
     def get_queryset(self):
         """Возвращает 5 последних заявок"""
         return Application.objects.order_by("-subm_date")[:5]
@@ -48,7 +47,6 @@ class ArchiveByYearMonthView(generic.ListView):
     def get_queryset(self):
         year = self.kwargs["year"]
         month = self.kwargs["month"]
-        # FIXME - при переходе на MySQL отсутствует фильтрация по суффиксу __month
         return (
             Application.objects.filter(
                 event_schedule__start__year=year,
