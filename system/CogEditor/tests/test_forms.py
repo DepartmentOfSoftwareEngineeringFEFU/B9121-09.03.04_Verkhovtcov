@@ -57,3 +57,24 @@ class ApplicationFormTest(TestCase):
         form = ApplicationForm(data=form_data)
         self.assertFalse(form.is_valid())
         self.assertIn('event_time_end', form.errors)
+
+    def test_form_save(self):
+        tomorrow = timezone.now() + datetime.timedelta(days=1)
+        form_data = {
+            'e_title': 'Тестовое мероприятие',
+            'e_description': 'Тестовое описание',
+            'organizer_employee_name': 'Тестовый сотрудник',
+            'event_date': tomorrow.date(),
+            'event_time_start': datetime.time(10, 0),
+            'event_time_end': datetime.time(12, 0),
+            'organizer': self.unit.id,
+            'e_format': self.event_format.id,
+            'number_of_participants': 10,
+        }
+        form = ApplicationForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
+        application = form.save()
+        self.assertEqual(application.e_title, 'Тестовое мероприятие')
+        self.assertEqual(application.event_schedule.count(), 1)
+        self.assertIsNotNone(application.organizer_employee)
