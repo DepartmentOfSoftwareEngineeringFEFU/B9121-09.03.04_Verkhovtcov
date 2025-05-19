@@ -179,14 +179,19 @@ class ApplicationForm(forms.ModelForm):
 
         if not instance.application_source_id:
             instance.application_source = Sources.objects.get(name="Сайт")
-        
+
+        # Сначала сохраняем instance, чтобы получить id
+        if commit:
+            instance.save()
+            self.save_m2m()  # Сохраняем ManyToMany, если они есть
+
+        # Теперь можно работать с ManyToMany (event_schedule)
         schedule = Schedule.objects.create(
             start=self.cleaned_data['event_start'],
             end=self.cleaned_data['event_end'],
             all_day=self.cleaned_data['event_all_day']
         )
-        instance.event_schedule.add(schedule)
-
+        instance.event_schedule.add(schedule)  # Теперь instance имеет id
 
         # Обработка сотрудника
         full_name = self.cleaned_data['organizer_employee_name']
@@ -200,8 +205,7 @@ class ApplicationForm(forms.ModelForm):
         instance.organizer_employee = employee
 
         if commit:
-            instance.save()
-            self.save_m2m()
-            print(f"Заявка сохранена! ID: {instance.id}")
+            instance.save()  # Сохраняем изменения (например, organizer_employee)
 
+        print(f"Заявка сохранена! ID: {instance.id}")
         return instance
