@@ -267,3 +267,16 @@ class RuleEngine:
             )
 
         return results
+
+
+class ClassificationSettings(models.Model):
+    change_status_on_classify = models.BooleanField(
+        default=True, verbose_name="Изменять статус при классификации"
+    )
+
+    class Meta:
+        verbose_name = "Настройка классификации"
+        verbose_name_plural = "Настройки классификации"
+
+    def __str__(self):
+        return "Настройки автоматической классификации"
