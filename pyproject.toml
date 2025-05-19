@@ -1,0 +1,27 @@
+[tool.black]
+line-length = 79
+skip-string-normalization = true
+target-version = ["py312"]
+include = '\.pyi?$'
+exclude = '''
+^(
+    .*/migrations/.*
+    | .*/\\.venv/.*
+    | .*/\\.git/.*
+)$
+'''
+
+[tool.isort]
+profile = "black"
+py_version = "312"
+skip = [".venv", "migrations", ".dockerignore"]
+skip_glob = ["**/migrations/**"]
+
+[tool.flake8]
+max-line-length = 79
+exclude = """
+    .git,
+    .venv,
+    */migrations/*,
+    __pycache__
+"""

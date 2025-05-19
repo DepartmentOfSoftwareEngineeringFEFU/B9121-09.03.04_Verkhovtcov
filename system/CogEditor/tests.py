@@ -4,14 +4,24 @@ from django.test import Client, TestCase
 from django.urls import reverse
 from django.utils import timezone
 
-from .models import (AgreedStatus, Application, Employee, EmployeePosition,
-                     ParticipatoryRole, StructuralUnit)
+from .models import (
+    AgreedStatus,
+    Application,
+    Employee,
+    EmployeePosition,
+    EventFormat,
+    ParticipatoryRole,
+    Schedule,
+    Sources,
+    StructuralUnit,
+)
 
 
 class ApplicationViewsTest(TestCase):
     def setUp(self):
         self.client = Client()
 
+        # Создание тестовых данных
         self.unit = StructuralUnit.objects.create(unit="Test Unit")
         self.position = EmployeePosition.objects.create(
             position="Test Position"
@@ -27,18 +37,33 @@ class ApplicationViewsTest(TestCase):
         self.role = ParticipatoryRole.objects.create(
             role="Test Role", description="Test Role Description"
         )
+        self.event_format = EventFormat.objects.create(
+            name="Test Format", description="Test Format Description"
+        )
+        self.source = Sources.objects.create(name="Test Source")
 
+        # Создание расписания для мероприятия
+        self.schedule = Schedule.objects.create(
+            start=timezone.now() + datetime.timedelta(days=1),
+            end=timezone.now() + datetime.timedelta(days=1, hours=2),
+            all_day=False,
+        )
+
+        # Создание тестовой заявки
         self.application = Application.objects.create(
+            subm_date=timezone.now(),
+            application_source=self.source,
             e_title="Test Event",
             e_description="Test Description",
-            e_start_time=timezone.now() + datetime.timedelta(days=1),
-            e_end_time=timezone.now() + datetime.timedelta(days=2),
+            e_format=self.event_format,
             number_of_participants=10,
-            organizer=self.employee,
+            organizer=self.unit,
+            organizer_employee=self.employee,
             status=self.status,
-            subm_date=timezone.now(),  # Добавлено
+            requires_technical_support=False,
         )
         self.application.roles.add(self.role)
+        self.application.event_schedule.add(self.schedule)
 
     # 1. Тест главной страницы
     def test_home_page(self):

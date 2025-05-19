@@ -1,7 +1,5 @@
-from datetime import timedelta
-
 import pandas as pd
-from CogEditor.models import AgreedStatus, Application, Schedule
+from CogEditor.models import Application
 from django.db.models import DurationField, ExpressionWrapper, F
 
 
