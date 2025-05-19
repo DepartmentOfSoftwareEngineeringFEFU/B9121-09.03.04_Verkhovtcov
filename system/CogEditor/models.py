@@ -224,10 +224,7 @@ class Schedule(models.Model):
         null=True,
     )
 
-    all_day = models.BooleanField(
-        verbose_name="Весь день",
-        default=False
-    )
+    all_day = models.BooleanField(verbose_name="Весь день", default=False)
 
     def __str__(self):
         return f"{self.start} – {self.end}"

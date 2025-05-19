@@ -8,7 +8,6 @@ from CogEditor.models import Application
 from CogNeural.LogisticRegression import process_time_features
 from django.db.models import DurationField, ExpressionWrapper, F, IntegerField
 from django.db.models.functions import Length
-from django.http import HttpResponse
 from django.shortcuts import render
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report, confusion_matrix
@@ -31,7 +30,7 @@ def index(request):
         description_len=ExpressionWrapper(
             Length(F("e_description")),
             output_field=IntegerField(),
-        )
+        ),
     ).values(
         "id",
         "subm_date",
@@ -42,7 +41,7 @@ def index(request):
         "processing_time",
         "event_duration",
         "event_schedule__start",
-        "event_schedule__end"
+        "event_schedule__end",
         # Убрали installation_deinstallation, так как их нет в данных
     )
 
@@ -52,7 +51,7 @@ def index(request):
     datetime_cols = [
         "subm_date",
         "event_schedule__start",
-        "event_schedule__end"
+        "event_schedule__end",
     ]
 
     for col in datetime_cols:
