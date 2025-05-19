@@ -1,8 +1,14 @@
 {% extends "base.html" %}
 
+
 {% load crispy_forms_tags %}
+{% load widget_tweaks %}
 
 {% block content %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{{ form.media }}
+
+
 <div class="container mt-4">
     <div class="card shadow-sm">
         <div class="card-header bg-primary text-white">
@@ -11,19 +17,19 @@
         <div class="card-body">
             <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
                 {% csrf_token %}
-                
+
                 {# Общие ошибки формы #}
                 {% if form.errors %}
-                    <div class="alert alert-danger">
-                        <strong>Ошибка!</strong> Пожалуйста, исправьте следующие ошибки:
-                        <ul>
-                            {% for field, errors in form.errors.items %}
-                                {% for error in errors %}
-                                    <li>{{ field|title }}: {{ error }}</li>
-                                {% endfor %}
-                            {% endfor %}
-                        </ul>
-                    </div>
+                <div class="alert alert-danger">
+                    <strong>Ошибка!</strong> Пожалуйста, исправьте следующие ошибки:
+                    <ul>
+                        {% for field, errors in form.errors.items %}
+                        {% for error in errors %}
+                        <li>{{ field|title }}: {{ error }}</li>
+                        {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
                 {% endif %}
 
 
@@ -33,41 +39,22 @@
                         <h4 class="mb-3">Основные данные</h4>
                         {{ form.e_title|as_crispy_field }}
                         {{ form.e_description|as_crispy_field }}
-                        
-                        <div class="row">
-                            <div class="col-md-6">
-                                {{ form.e_format|as_crispy_field }}
-                            </div>
-                            <div class="col-md-6">
-                                {{ form.number_of_participants|as_crispy_field }}
-                            </div>
-                        </div>
                     </div>
-                    
+
                     <div class="col-md-4">
                         <h4 class="mb-3">Организационные данные</h4>
                         {{ form.organizer|as_crispy_field }}
                         {{ form.organizer_employee_name|as_crispy_field }}
+
+                        {{ form.e_format|as_crispy_field }}
+                        {{ form.number_of_participants|as_crispy_field }}
+
                     </div>
                 </div>
-                
+
                 <!-- Временные параметры -->
-                <div class="card mb-4">
-                    <div class="card-header bg-light">
-                        <h4 class="h6 mb-0">Временные параметры</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                {{ form.installation_deinstallation|as_crispy_field }}
-                            </div>
-                            <div class="col-md-6">
-                                {{ form.event_schedule|as_crispy_field }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
+                {% include "CogSolver/includes/datetime_code.html" %}
+
                 <!-- Технические требования -->
                 <div class="card mb-4">
                     <div class="card-header bg-light">
@@ -85,7 +72,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Дополнительная информация -->
                 <div class="row mb-4">
                     <div class="col-md-6">
@@ -95,7 +82,7 @@
                         {{ form.order|as_crispy_field }}
                     </div>
                 </div>
-                
+
                 <div class="d-flex justify-content-between">
                     <button type="submit" class="btn btn-primary px-4">
                         <i class="bi bi-save me-2"></i>Сохранить заявку
@@ -114,34 +101,49 @@
     .card {
         border-radius: 0.5rem;
     }
-    
+
     .card-header {
         border-radius: 0.5rem 0.5rem 0 0 !important;
     }
-    
+
     select[multiple] {
         min-height: 150px;
     }
-    
+
     .form-group {
         margin-bottom: 1.25rem;
     }
-    
+
     @media (max-width: 768px) {
         .card-body {
             padding: 1rem;
         }
     }
+
+    .form-control-sm {
+        height: calc(1.5em + 0.5rem + 2px);
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+        line-height: 1.5;
+    }
+
+    .input-group-sm>.form-control,
+    .input-group-sm>.input-group-append>.input-group-text {
+        height: calc(1.5em + 0.5rem + 2px);
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+        line-height: 1.5;
+    }
 </style>
 
 <script>
     // Валидация формы
-    (function() {
+    (function () {
         'use strict';
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
             var forms = document.getElementsByClassName('needs-validation');
-            Array.prototype.filter.call(forms, function(form) {
-                form.addEventListener('submit', function(event) {
+            Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
                     if (form.checkValidity() === false) {
                         event.preventDefault();
                         event.stopPropagation();
@@ -151,6 +153,24 @@
             });
         }, false);
     })();
-    
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const allDayCheckbox = document.querySelector('#{{ form.event_all_day.id_for_label }}');
+        const regularFields = document.getElementById('regular-time-fields');
+        const allDayFields = document.getElementById('all-day-fields');
+
+        function toggleFields() {
+            if (allDayCheckbox.checked) {
+                regularFields.style.display = 'none';
+                allDayFields.style.display = 'block';
+            } else {
+                regularFields.style.display = 'block';
+                allDayFields.style.display = 'none';
+            }
+        }
+
+        allDayCheckbox.addEventListener('change', toggleFields);
+        toggleFields(); // Инициализация при загрузке
+    });
 </script>
 {% endblock %}
