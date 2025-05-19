@@ -75,3 +75,17 @@ class RuleModelTest(TestCase):
         # Тест с неактивным правилом
         rule.is_active = False
         self.assertFalse(rule.evaluate(self.application))
+
+    def test_role_check_rule(self):
+        rule = Rule.objects.create(
+            name="Правило проверки роли",
+            condition_type="role_check",
+            new_status=self.status2,
+            is_active=True,
+        )
+        rule.role_id.add(self.role1)
+        self.assertTrue(rule.evaluate(self.application))
+
+        rule.role_id.clear()
+        rule.role_id.add(self.role2)
+        self.assertFalse(rule.evaluate(self.application))
