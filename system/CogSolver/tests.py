@@ -136,3 +136,47 @@ class RuleModelTest(TestCase):
                 new_status=self.status1,
             )
             rule.full_clean()
+
+
+class RuleEngineTest(TestCase):
+    def setUp(self):
+        # Используем данные из setUp предыдущего теста
+        self.status1 = AgreedStatus.objects.create(
+            status="Статус 1", n_stage=1
+        )
+        self.status2 = AgreedStatus.objects.create(
+            status="Статус 2", n_stage=2
+        )
+        self.role1 = ParticipatoryRole.objects.create(role="Роль 1")
+
+        self.unit = StructuralUnit.objects.create(
+            unit="Тестовое подразделение"
+        )
+        self.position = EmployeePosition.objects.create(
+            position="Тестовая должность"
+        )
+        self.employee = Employee.objects.create(
+            full_name="Тестовый сотрудник",
+            position=self.position,
+            structural_unit=self.unit,
+        )
+        self.source = Sources.objects.create(name="Тестовый источник")
+        self.event_format = EventFormat.objects.create(name="Тестовый формат")
+
+        self.schedule = Schedule.objects.create(
+            start=datetime.datetime.now() + datetime.timedelta(days=1),
+            end=datetime.datetime.now() + datetime.timedelta(days=1, hours=2),
+        )
+
+        self.application = Application.objects.create(
+            subm_date=datetime.datetime.now(),
+            application_source=self.source,
+            e_title="Тестовое мероприятие",
+            e_description="Тестовое описание",
+            e_format=self.event_format,
+            organizer=self.unit,
+            organizer_employee=self.employee,
+            status=self.status1,
+        )
+        self.application.roles.add(self.role1)
+        self.application.event_schedule.add(self.schedule)
