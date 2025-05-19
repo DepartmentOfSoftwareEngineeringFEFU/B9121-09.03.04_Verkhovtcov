@@ -115,7 +115,7 @@ class ApplicationForm(forms.ModelForm):
             'application_source',
             'organizer_employee',
             'event_schedule',
-            'installation_deinstallation',
+            'installation_dismantling',
         ]
         widgets = {
             'subm_date': forms.HiddenInput(),  # Скрытое поле
