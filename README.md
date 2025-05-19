@@ -35,7 +35,7 @@ python manage.py runserver 192.168.1.37:8050 --insecure
 python manage.py runserver 0.0.0.0:8050 --insecure
 ```
 
-Локальный IP-адресс можно узнать через команду ipconfig
+Локальный IP-адрес можно узнать через команду ipconfig
 
 
 ### Дамп и загрузка данных
