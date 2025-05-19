@@ -1,5 +1,4 @@
-from CogEditor.models import Application, Employee, StructuralUnit
-from django.shortcuts import get_object_or_404
+from CogEditor.models import Application, StructuralUnit
 from django.views import generic
 
 
