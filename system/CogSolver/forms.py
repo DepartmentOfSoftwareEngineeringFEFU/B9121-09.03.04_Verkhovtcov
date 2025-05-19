@@ -2,7 +2,7 @@ import datetime
 
 from bootstrap_datepicker_plus.widgets import DatePickerInput
 from CogEditor.models import (AgreedStatus, Application, Employee,
-                              EmployeePosition, Sources, Schedule)
+                              EmployeePosition, Schedule, Sources)
 from django import forms
 from django.utils import timezone
 
@@ -11,7 +11,7 @@ class ApplicationForm(forms.ModelForm):
     e_title = forms.CharField(
         max_length=256,
         widget=forms.Textarea(attrs={'rows': 1}),
-        label="Наименование мероприятия*"
+        label="Наименование мероприятия",
     )
 
     e_description = forms.CharField(
@@ -23,7 +23,7 @@ class ApplicationForm(forms.ModelForm):
     organizer_employee_name = forms.CharField(
         max_length=64,
         label="ФИО ответственного за организацию",
-        required=True
+        required=True,
     )
 
     now = timezone.now()
@@ -122,7 +122,7 @@ class ApplicationForm(forms.ModelForm):
         self.initial.update({
             'subm_date': timezone.now(),
             'status': AgreedStatus.objects.get(n_stage=4),
-            'application_source': Sources.objects.get(name="Сайт")
+            'application_source': Sources.objects.get(name="Сайт"),
         })
 
     def clean(self):
@@ -139,7 +139,6 @@ class ApplicationForm(forms.ModelForm):
             if date_start > date_end:
                 raise forms.ValidationError("Дата начала не может быть позже даты окончания")
             
-            import datetime
             cleaned_data['event_start'] = datetime.datetime.combine(date_start, datetime.time.min)
             cleaned_data['event_end'] = datetime.datetime.combine(date_end, datetime.time.max)
         else:
@@ -158,6 +157,7 @@ class ApplicationForm(forms.ModelForm):
                 raise forms.ValidationError("Время начала не может быть позже времени окончания")
             cleaned_data['event_start'] = datetime.datetime.combine(event_date, time_start)
             cleaned_data['event_end'] = datetime.datetime.combine(event_date, time_end)
+        
         # Гарантируем установку обязательных полей
         if not cleaned_data.get('subm_date'):
             cleaned_data['subm_date'] = timezone.now()
