@@ -51,3 +51,18 @@ python manage.py dumpdata --natural-foreign --natural-primary -e contenttypes -e
 ```bash
 python manage.py loaddata dump.json
 ```
+
+### Pre-Commit
+Этот хук можно использовать для проверки отправляемого снимка состояния. К примеру, он позволяет запустить автоматическое тестирование и проверить, не нарушит ли коммит работу существующих функций. Скрипт pre-commit не принимает аргументов, а ненулевое состояние выхода приведет к отмене всего коммита.
+
+```base
+pre-commit clean
+```
+
+```base
+pre-commit install
+```
+
+```base
+pre-commit run --all-files
+```
