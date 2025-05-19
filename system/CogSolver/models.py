@@ -201,7 +201,7 @@ class RuleEngine:
     def batch_apply_rules():
         """Применяет правила ко всем заявкам и возвращает результаты"""
         results = []
-        applications = Application.objects.all()
+        applications = Application.objects.all().reverse()
 
         for app in applications:
             new_status = RuleEngine.apply_rules_to_application(app)

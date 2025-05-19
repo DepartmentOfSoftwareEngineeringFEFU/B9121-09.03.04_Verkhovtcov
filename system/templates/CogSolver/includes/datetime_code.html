@@ -1,0 +1,140 @@
+{% load widget_tweaks %}
+
+<div class="row">
+    <!-- Блок мероприятия -->
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header bg-light">
+                <h4 class="h6 mb-0">Даты бронирования</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="{{ form.event_date.id_for_label }}">Дата</label>
+                            {{ form.event_date }}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="{{ form.event_time_start.id_for_label }}">Начало</label>
+                            {{ form.event_time_start }}
+                        </div>
+                    </div>
+                    <div id="end-date-container" style="display: none;">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="{{ form.event_date_end.id_for_label }}">Дата окончания</label>
+                                {{ form.event_date_end }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="{{ form.event_time_end.id_for_label }}">Окончание</label>
+                            {{ form.event_time_end }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-md-6">
+                        <div class="form-check">
+                            {{ form.event_all_day }}
+                            <label class="form-check-label" for="{{ form.event_all_day.id_for_label }}">
+                                Весь день
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="button" class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-plus"></i> Добавить день
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Блок монтажа/демонтажа -->
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header bg-light">
+                <h4 class="h6 mb-0">Монтаж/демонтаж</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="{{ form.setup_date_start.id_for_label }}">Начало монтажа</label>
+                            {{ form.setup_date_start }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="{{ form.setup_date_end.id_for_label }}">Окончание демонтажа</label>
+                            {{ form.setup_date_end }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Обработка чекбокса "Весь день"
+        const allDayCheckbox = document.getElementById('{{ form.event_all_day.id_for_label }}');
+        const timeStartInput = document.getElementById('{{ form.event_time_start.id_for_label }}');
+        const timeEndInput = document.getElementById('{{ form.event_time_end.id_for_label }}');
+
+        document.getElementById('all_day_checkbox').addEventListener('change', function () {
+            document.getElementById('end-date-container').style.display = this.checked ? 'block' : 'none';
+        });
+
+
+        allDayCheckbox.addEventListener('change', function () {
+            if (this.checked) {
+                timeStartInput.value = '00:00';
+                timeEndInput.value = '23:59';
+                timeStartInput.disabled = true;
+                timeEndInput.disabled = true;
+            } else {
+                // timeStartInput.value = '12:00';
+                // timeEndInput.value = '15:00';
+                timeStartInput.disabled = false;
+                timeEndInput.disabled = false;
+            }
+        });
+
+        // Инициализация при загрузке
+        if (allDayCheckbox.checked) {
+            timeStartInput.disabled = true;
+            timeEndInput.disabled = true;
+        }
+    });
+</script>
+<style>
+    .form-control-sm {
+        height: calc(1.5em + 0.5rem + 2px);
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+        line-height: 1.5;
+        max-width: 100%;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .form-check {
+        padding-left: 1.25rem;
+    }
+
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+        line-height: 1.5;
+    }
+</style>
