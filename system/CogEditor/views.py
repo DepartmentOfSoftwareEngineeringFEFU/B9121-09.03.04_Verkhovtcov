@@ -93,7 +93,33 @@ class FullArchiveView(generic.ListView):
 
 
 class ApplicationCreateView(CreateView):
+
     model = Application
     form_class = ApplicationForm
     template_name = 'CogEditor/application_classifier.html'
     success_url = '/solver/'
+
+    def get_form_kwargs(self):
+        """Добавляем default значения в форму"""
+        kwargs = super().get_form_kwargs()
+
+        from CogEditor.models import AgreedStatus, Sources
+
+        # Получаем или создаем default значения
+        default_status = AgreedStatus.objects.filter(n_stage=4).first()
+        if default_status is None:
+            default_status = AgreedStatus.objects.create(
+                status="Предварительное согласование", n_stage=4
+            )
+
+        default_source = Sources.objects.filter(name="Сайт").first()
+        if default_source is None:
+            default_source = Sources.objects.create(name="Сайт")
+
+        kwargs.update(
+            {
+                'default_status': default_status,
+                'default_source': default_source,
+            }
+        )
+        return kwargs

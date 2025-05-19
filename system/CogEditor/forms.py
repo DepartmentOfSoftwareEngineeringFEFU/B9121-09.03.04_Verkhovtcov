@@ -128,12 +128,35 @@ class ApplicationForm(forms.ModelForm):
             ),
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(
+        self, *args, default_status=None, default_source=None, **kwargs
+    ):
         super().__init__(*args, **kwargs)
 
         # Делаем поля необязательными для формы
         self.fields['subm_date'].required = False
         self.fields['status'].required = False
+
+        if default_status is None:
+            default_status, _ = AgreedStatus.objects.get_or_create(
+                n_stage=4,
+                defaults={
+                    'status': 'Направлена на согласование администратору'
+                },
+            )
+
+        if default_source is None:
+            default_source, _ = Sources.objects.get_or_create(
+                name="Сайт", defaults={'name': 'Сайт'}
+            )
+
+        self.initial.update(
+            {
+                'subm_date': timezone.now(),
+                'status': default_status,
+                'application_source': default_source,
+            }
+        )
 
         # Устанавливаем значения по умолчанию
         self.initial.update(

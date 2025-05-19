@@ -31,6 +31,7 @@ class ApplicationViewsTest(TestCase):
             position=self.position,
             structural_unit=self.unit,
         )
+
         self.status = AgreedStatus.objects.create(
             status="Test Status", description="Test Description", n_stage=1
         )
@@ -40,6 +41,7 @@ class ApplicationViewsTest(TestCase):
         self.event_format = EventFormat.objects.create(
             name="Test Format", description="Test Format Description"
         )
+
         self.source = Sources.objects.create(name="Test Source")
 
         # Создание расписания для мероприятия
@@ -108,7 +110,7 @@ class ApplicationViewsTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.application.e_title)
 
-    # 7. Тест мероприятий организатора
+    # 7. Тест отображения формы ввода данных
     def test_application_classifier_view(self):
         response = self.client.get(reverse("CogEditor:application_classifier"))
         self.assertEqual(response.status_code, 200)
@@ -117,9 +119,20 @@ class ApplicationViewsTest(TestCase):
         response = self.client.post(
             reverse("CogEditor:application_classifier"),
             {
-                'e_title': 'Тестовое мероприятие',
-                'e_description': 'Тестовое описание',
-                # Добавьте другие обязательные поля формы
+                'e_title': self.application.e_title,
+                'e_description': self.application.e_description,
+                'status': self.application.status,
+                'application_source': self.application.application_source,
+                'e_format': self.application.e_format,
+                'number_of_participants': (
+                    self.application.number_of_participants
+                ),
+                'organizer': self.application.organizer,
+                'organizer_employee': self.application.organizer_employee,
+                'subm_date': self.application.subm_date,
+                'requires_technical_support': (
+                    self.application.requires_technical_support
+                ),
             },
         )
         self.assertEqual(response.status_code, 200)  # Или 302 если редирект
