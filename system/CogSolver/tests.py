@@ -89,3 +89,19 @@ class RuleModelTest(TestCase):
         rule.role_id.clear()
         rule.role_id.add(self.role2)
         self.assertFalse(rule.evaluate(self.application))
+
+    def test_text_length_rule(self):
+        rule = Rule.objects.create(
+            name="Правило длины текста",
+            condition_type="text_length",
+            min_text_length=50,
+            new_status=self.status2,
+            is_active=True,
+        )
+        self.assertTrue(
+            rule.evaluate(self.application)
+        )  # Текст короче 50 символов
+
+        self.application.e_description = "Очень длинное описание " * 10
+        self.application.save()
+        self.assertFalse(rule.evaluate(self.application))
