@@ -133,23 +133,52 @@ class Rule(models.Model):
                 # Инициализация флагов
                 date_ok = role_ok = text_ok = True
 
-                # Проверка дат
+                # Проверка дат (исправленная часть)
                 if self.days_threshold is not None:
-                    threshold_date = (
-                        application.subm_date
-                        + datetime.timedelta(days=self.days_threshold)
-                    )
-                    event_schedules = application.event_schedule.all()
-                    date_ok = event_schedules.exists() and all(
-                        schedule.start and threshold_date >= schedule.start
-                        for schedule in event_schedules
-                    )
+                    if application.subm_date is None:
+                        date_ok = False
+                    else:
+                        from django.utils import timezone
 
-                # Проверка ролей
-                if self.role_id.exists():  # Упрощенная проверка
-                    role_ok = application.roles.filter(
-                        id__in=self.role_id.values_list("id", flat=True)
-                    ).exists()
+                        # Нормализуем дату подачи заявки
+                        subm_date = application.subm_date
+                        if timezone.is_naive(subm_date):
+                            subm_date = timezone.make_aware(subm_date)
+
+                        threshold_date = subm_date + datetime.timedelta(
+                            days=self.days_threshold
+                        )
+
+                        # Проверяем все расписания
+                        has_valid_dates = False
+                        for schedule in application.event_schedule.all():
+                            if schedule.start is None:
+                                continue
+
+                            event_date = schedule.start
+                            if timezone.is_naive(event_date):
+                                event_date = timezone.make_aware(event_date)
+
+                            # Приводим обе даты к UTC для корректного сравнения
+                            event_date_utc = event_date.astimezone(
+                                datetime.timezone.utc
+                            )
+                            threshold_date_utc = threshold_date.astimezone(
+                                datetime.timezone.utc
+                            )
+
+                            if event_date_utc >= threshold_date_utc:
+                                date_ok = False
+                                break
+
+                            has_valid_dates = True
+
+                        date_ok = date_ok and has_valid_dates
+                        # Проверка ролей
+                    if self.role_id.exists():  # Упрощенная проверка
+                        role_ok = application.roles.filter(
+                            id__in=self.role_id.values_list("id", flat=True)
+                        ).exists()
 
                 # Проверка длины текста
                 if self.min_text_length is not None:
