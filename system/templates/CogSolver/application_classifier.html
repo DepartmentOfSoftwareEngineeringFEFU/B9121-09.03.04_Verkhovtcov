@@ -8,36 +8,40 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 {{ form.media }}
 
-
 <div class="container mt-4">
     <div class="card shadow-sm">
         <div class="card-header bg-primary text-white">
             <h2 class="h5 mb-0">Форма подачи заявки на мероприятие</h2>
         </div>
         <div class="card-body">
-            <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+            <form
+                method="post"
+                enctype="multipart/form-data"
+                class="needs-validation"
+                novalidate
+            >
                 {% csrf_token %}
 
                 {# Общие ошибки формы #}
                 {% if form.errors %}
                 <div class="alert alert-danger">
-                    <strong>Ошибка!</strong> Пожалуйста, исправьте следующие ошибки:
+                    <strong>Ошибка!</strong> Пожалуйста, исправьте следующие
+                    ошибки:
                     <ul>
                         {% for field, errors in form.errors.items %}
-                        {% for error in errors %}
-                        <li>{{ field|title }}: {{ error }}</li>
-                        {% endfor %}
+                            {% for error in errors %}
+                                <li>{{ field|title }}: {{ error }}</li>
+                            {% endfor %} 
                         {% endfor %}
                     </ul>
                 </div>
                 {% endif %}
 
-
                 <!-- Основная информация -->
                 <div class="row mb-4">
                     <div class="col-md-8">
                         <h4 class="mb-3">Основные данные</h4>
-                        {{ form.e_title|as_crispy_field }}
+                        {{ form.e_title|as_crispy_field }} 
                         {{ form.e_description|as_crispy_field }}
                     </div>
 
@@ -45,15 +49,13 @@
                         <h4 class="mb-3">Организационные данные</h4>
                         {{ form.organizer|as_crispy_field }}
                         {{ form.organizer_employee_name|as_crispy_field }}
-
                         {{ form.e_format|as_crispy_field }}
                         {{ form.number_of_participants|as_crispy_field }}
-
                     </div>
                 </div>
 
                 <!-- Временные параметры -->
-                {% include "CogSolver/includes/datetime_code.html" %}
+                {% include 'CogSolver/includes/datetime_code.html' %}
 
                 <!-- Технические требования -->
                 <div class="card mb-4">
@@ -75,12 +77,8 @@
 
                 <!-- Дополнительная информация -->
                 <div class="row mb-4">
-                    <div class="col-md-6">
-                        {{ form.roles|as_crispy_field }}
-                    </div>
-                    <div class="col-md-6">
-                        {{ form.order|as_crispy_field }}
-                    </div>
+                    <div class="col-md-6">{{ form.roles|as_crispy_field }}</div>
+                    <div class="col-md-6">{{ form.order|as_crispy_field }}</div>
                 </div>
 
                 <div class="d-flex justify-content-between">
@@ -127,8 +125,8 @@
         line-height: 1.5;
     }
 
-    .input-group-sm>.form-control,
-    .input-group-sm>.input-group-append>.input-group-text {
+    .input-group-sm > .form-control,
+    .input-group-sm > .input-group-append > .input-group-text {
         height: calc(1.5em + 0.5rem + 2px);
         padding: 0.25rem 0.5rem;
         font-size: 0.875rem;
@@ -139,37 +137,47 @@
 <script>
     // Валидация формы
     (function () {
-        'use strict';
-        window.addEventListener('load', function () {
-            var forms = document.getElementsByClassName('needs-validation');
-            Array.prototype.filter.call(forms, function (form) {
-                form.addEventListener('submit', function (event) {
-                    if (form.checkValidity() === false) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-                    form.classList.add('was-validated');
-                }, false);
-            });
-        }, false);
+        "use strict";
+        window.addEventListener(
+            "load",
+            function () {
+                var forms = document.getElementsByClassName("needs-validation");
+                Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener(
+                        "submit",
+                        function (event) {
+                            if (form.checkValidity() === false) {
+                                event.preventDefault();
+                                event.stopPropagation();
+                            }
+                            form.classList.add("was-validated");
+                        },
+                        false
+                    );
+                });
+            },
+            false
+        );
     })();
 
-    document.addEventListener('DOMContentLoaded', function () {
-        const allDayCheckbox = document.querySelector('#{{ form.event_all_day.id_for_label }}');
-        const regularFields = document.getElementById('regular-time-fields');
-        const allDayFields = document.getElementById('all-day-fields');
+    document.addEventListener("DOMContentLoaded", function () {
+        const allDayCheckbox = document.querySelector(
+            "#{{ form.event_all_day.id_for_label }}"
+        );
+        const regularFields = document.getElementById("regular-time-fields");
+        const allDayFields = document.getElementById("all-day-fields");
 
         function toggleFields() {
             if (allDayCheckbox.checked) {
-                regularFields.style.display = 'none';
-                allDayFields.style.display = 'block';
+                regularFields.style.display = "none";
+                allDayFields.style.display = "block";
             } else {
-                regularFields.style.display = 'block';
-                allDayFields.style.display = 'none';
+                regularFields.style.display = "block";
+                allDayFields.style.display = "none";
             }
         }
 
-        allDayCheckbox.addEventListener('change', toggleFields);
+        allDayCheckbox.addEventListener("change", toggleFields);
         toggleFields(); // Инициализация при загрузке
     });
 </script>
