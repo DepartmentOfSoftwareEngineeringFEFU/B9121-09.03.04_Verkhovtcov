@@ -14,6 +14,7 @@ from CogEditor.models import (
 from CogSolver.models import Rule, RuleEngine
 from django.core.exceptions import ValidationError
 from django.test import Client, TestCase
+from django.urls import reverse
 
 
 class RuleModelTest(TestCase):
@@ -229,3 +230,7 @@ class CogSolverViewsTest(TestCase):
         self.status = AgreedStatus.objects.create(
             status="Тестовый статус", n_stage=1
         )
+
+    def test_rules_report_view(self):
+        response = self.client.get(reverse("CogSolver:rules_report"))
+        self.assertEqual(response.status_code, 200)
