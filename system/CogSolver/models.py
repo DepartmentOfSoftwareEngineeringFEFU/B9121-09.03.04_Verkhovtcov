@@ -229,14 +229,20 @@ class RuleEngine:
     def apply_rules_to_application(
         application,
     ):
+        settings = ClassificationSettings.objects.first()
+        change_status = (
+            settings.change_status_on_classify if settings else True
+        )
+
         rules = Rule.objects.filter(is_active=True).order_by("-priority")
 
         for rule in rules:
             try:
                 if rule.evaluate(application):
                     # Возвращаем новый статус и обновляем заявку
-                    application.status = rule.new_status
-                    application.save()
+                    if change_status:
+                        application.status = rule.new_status
+                        application.save()
                     return rule.new_status
 
             except Exception as e:
