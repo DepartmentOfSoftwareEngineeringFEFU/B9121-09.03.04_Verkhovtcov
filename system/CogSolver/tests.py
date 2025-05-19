@@ -207,3 +207,17 @@ class RuleEngineTest(TestCase):
 
         new_status = RuleEngine.apply_rules_to_application(self.application)
         self.assertEqual(new_status, self.status1)
+
+    def test_batch_apply_rules(self):
+        Rule.objects.create(
+            name="Тестовое правило",
+            condition_type="date_compare",
+            days_threshold=2,
+            new_status=self.status2,
+            is_active=True,
+        )
+
+        results = RuleEngine.batch_apply_rules()
+        self.assertEqual(len(results), 1)
+        self.assertTrue(results[0]['status_changed'])
+        self.assertEqual(results[0]['new_status'], self.status2)
