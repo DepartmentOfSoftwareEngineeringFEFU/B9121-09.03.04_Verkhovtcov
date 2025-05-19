@@ -30,6 +30,14 @@
 python manage.py runserver 192.168.1.37:8050 --insecure
 ```
 
+Запуск на localhost с возможностью допуска с ПК локальной сети:
+```bash
+python manage.py runserver 0.0.0.0:8050 --insecure
+```
+
+Локальный IP-адресс можно узнать через команду ipconfig
+
+
 ### Дамп и загрузка данных
 
 В папке с manage.py выполнить команду для создания дампа в файл dump.json
