@@ -95,5 +95,5 @@ class FullArchiveView(generic.ListView):
 class ApplicationCreateView(CreateView):
     model = Application
     form_class = ApplicationForm
-    template_name = 'CogSolver/application_classifier.html'
+    template_name = 'CogEditor/application_classifier.html'
     success_url = '/solver/'
