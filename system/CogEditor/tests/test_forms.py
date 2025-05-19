@@ -6,6 +6,7 @@ from CogEditor.models import (
     Employee,
     EmployeePosition,
     EventFormat,
+    ParticipatoryRole,
     Sources,
     StructuralUnit,
 )
@@ -60,6 +61,9 @@ class ApplicationFormTest(TestCase):
 
     def test_form_save(self):
         tomorrow = timezone.now() + datetime.timedelta(days=1)
+        test_role = ParticipatoryRole.objects.create(
+            role="Тестовая роль", description="Описание тестовой роли"
+        )
         form_data = {
             'e_title': 'Тестовое мероприятие',
             'e_description': 'Тестовое описание',
@@ -70,11 +74,15 @@ class ApplicationFormTest(TestCase):
             'organizer': self.unit.id,
             'e_format': self.event_format.id,
             'number_of_participants': 10,
+            'roles': [test_role.id],
+            'status': self.status.id,
         }
         form = ApplicationForm(data=form_data)
-        self.assertTrue(form.is_valid())
+        self.assertTrue(form.is_valid(), msg=f"Form errors: {form.errors}")
 
         application = form.save()
         self.assertEqual(application.e_title, 'Тестовое мероприятие')
         self.assertEqual(application.event_schedule.count(), 1)
+        self.assertEqual(application.roles.count(), 1)
+        self.assertEqual(application.roles.first(), test_role)
         self.assertIsNotNone(application.organizer_employee)
