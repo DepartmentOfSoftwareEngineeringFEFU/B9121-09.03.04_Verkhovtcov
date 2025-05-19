@@ -1,5 +1,7 @@
+from CogEditor.forms import ApplicationForm
 from CogEditor.models import Application, StructuralUnit
 from django.views import generic
+from django.views.generic.edit import CreateView
 
 
 class IndexView(generic.ListView):
@@ -88,3 +90,10 @@ class FullArchiveView(generic.ListView):
     context_object_name = "application_list"
     queryset = Application.objects.all().order_by("-subm_date")
     paginate_by = 10
+
+
+class ApplicationCreateView(CreateView):
+    model = Application
+    form_class = ApplicationForm
+    template_name = 'CogSolver/application_classifier.html'
+    success_url = '/solver/'

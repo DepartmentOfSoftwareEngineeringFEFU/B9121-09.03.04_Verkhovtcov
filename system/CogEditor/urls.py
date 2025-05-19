@@ -26,4 +26,9 @@ urlpatterns = [
         views.OrganizerEventsView.as_view(),
         name="organizer_events",
     ),
+    path(
+        "application_classifier/",
+        views.ApplicationCreateView.as_view(),
+        name="application_classifier",
+    ),
 ]
