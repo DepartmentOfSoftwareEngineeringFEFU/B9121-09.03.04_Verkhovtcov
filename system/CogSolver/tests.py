@@ -11,6 +11,7 @@ from CogEditor.models import (
     Sources,
     StructuralUnit,
 )
+from CogSolver.models import Rule
 from django.test import TestCase
 
 
@@ -41,8 +42,10 @@ class RuleModelTest(TestCase):
         self.source = Sources.objects.create(name="Тестовый источник")
         self.event_format = EventFormat.objects.create(name="Тестовый формат")
 
+        # В setUp():
         self.schedule = Schedule.objects.create(
-            start=datetime.datetime.now() + datetime.timedelta(days=1),
+            start=datetime.datetime.now()
+            + datetime.timedelta(days=1),  # Мероприятие через 1 день
             end=datetime.datetime.now() + datetime.timedelta(days=1, hours=2),
         )
 
@@ -58,3 +61,17 @@ class RuleModelTest(TestCase):
         )
         self.application.roles.add(self.role1)
         self.application.event_schedule.add(self.schedule)
+
+    def test_date_compare_rule(self):
+        rule = Rule.objects.create(
+            name="Правило сравнения дат",
+            condition_type="date_compare",
+            days_threshold=2,
+            new_status=self.status2,
+            is_active=True,
+        )
+        self.assertTrue(rule.evaluate(self.application))
+
+        # Тест с неактивным правилом
+        rule.is_active = False
+        self.assertFalse(rule.evaluate(self.application))
