@@ -12,6 +12,7 @@ from CogEditor.models import (
     StructuralUnit,
 )
 from CogSolver.models import Rule
+from django.core.exceptions import ValidationError
 from django.test import TestCase
 
 
@@ -124,3 +125,14 @@ class RuleModelTest(TestCase):
         rule.role_id.clear()
         rule.role_id.add(self.role2)
         self.assertFalse(rule.evaluate(self.application))
+
+    def test_rule_clean_validation(self):
+        # Проверка валидации для разных типов правил
+        with self.assertRaises(ValidationError):
+            rule = Rule(
+                name="Некорректное правило дат",
+                condition_type="date_compare",
+                days_threshold=None,
+                new_status=self.status1,
+            )
+            rule.full_clean()
