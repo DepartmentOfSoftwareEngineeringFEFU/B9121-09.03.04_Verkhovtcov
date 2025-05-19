@@ -2,8 +2,8 @@ from CogEditor.models import Application
 from CogSolver.forms import ApplicationForm
 from CogSolver.models import Rule, RuleEngine
 from django.shortcuts import render
-from django.views.generic.edit import CreateView
 from django.views import generic
+from django.views.generic.edit import CreateView
 
 
 def rules_report(request):
