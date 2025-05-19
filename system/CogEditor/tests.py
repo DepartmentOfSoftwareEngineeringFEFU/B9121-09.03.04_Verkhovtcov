@@ -67,7 +67,7 @@ class ApplicationViewsTest(TestCase):
 
     # 1. Тест главной страницы
     def test_home_page(self):
-        response = self.client.get(reverse("index"))
+        response = self.client.get(reverse("CogEditor:index"))
         self.assertEqual(response.status_code, 200)
 
     # 2. Тест архива за месяц
@@ -75,25 +75,27 @@ class ApplicationViewsTest(TestCase):
         year = datetime.datetime.now().year
         month = datetime.datetime.now().month
         response = self.client.get(
-            reverse("archive_by_year_month", args=[year, month])
+            reverse("CogEditor:archive_by_year_month", args=[year, month])
         )
         self.assertEqual(response.status_code, 200)
 
     # 3. Тест архива за год
     def test_archive_year(self):
         year = datetime.datetime.now().year
-        response = self.client.get(reverse("archive_by_year", args=[year]))
+        response = self.client.get(
+            reverse("CogEditor:archive_by_year", args=[year])
+        )
         self.assertEqual(response.status_code, 200)
 
     # 4. Тест полного архива
     def test_archive_all(self):
-        response = self.client.get(reverse("archive"))
+        response = self.client.get(reverse("CogEditor:archive"))
         self.assertEqual(response.status_code, 200)
 
     # 5. Тест получения заявки по ID
-    def test_application_detail(self):
+    def test_detail(self):
         response = self.client.get(
-            reverse("application_detail", args=[self.application.id])
+            reverse("CogEditor:detail", args=[self.application.id])
         )
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.application.e_title)
@@ -101,7 +103,7 @@ class ApplicationViewsTest(TestCase):
     # 6. Тест мероприятий организатора
     def test_organizer_events(self):
         response = self.client.get(
-            reverse('organizer_events', args=[self.employee.id])
+            reverse('CogEditor:organizer_events', args=[self.employee.id])
         )
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.application.e_title)

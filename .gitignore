@@ -184,3 +184,4 @@ cython_debug/
 .vscode/launch.json
 system/dump.json
 dump.json
+.vscode/settings.json
