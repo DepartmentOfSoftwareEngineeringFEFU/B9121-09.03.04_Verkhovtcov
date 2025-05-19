@@ -1,24 +1,23 @@
 repos:
--   repo: https://github.com/psf/black
-    rev: 25.1.0
+  - repo: https://github.com/psf/black
+    rev: 24.4.0
     hooks:
-    -   id: black
-        language: python  # Явно указываем использовать Python окружение
-        additional_dependencies: [black]
-        name: "Black"
-        args:
-        - --config=pyproject.toml
--   repo: https://github.com/pycqa/flake8
-    rev: 7.2.0
-    hooks:
-    -   id: flake8
-        name: "flake8"
-        additional_dependencies:
-        - flake8-bugbear
-repos:
+      - id: black
+        name: Black
+        exclude: ^.*\b(migrations)\b.*$
+
+
   - repo: https://github.com/pycqa/isort
-    rev: 5.13.2  # актуальная версия
+    rev: 6.0.1
     hooks:
       - id: isort
-        name: isort (сортировка импортов)
-        args: ["--profile", "black"]  # для совместимости с Black
+        name: isort
+
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.0.0
+    hooks:
+      - id: flake8
+        name: flake8
+        additional_dependencies: [flake8-bugbear]
+        exclude: ^.*\b(migrations)\b.*$
+
