@@ -21,7 +21,6 @@
 
 ---
 
-
 ## Функциональность
 
 - **Создание брони:** Пользователь может заполнить и сохранить заявку на бронирование молодежного пространства.
@@ -46,7 +45,6 @@
    Позволяет просматривать работу модели логистической регрессии.
 
 ---
-
 
 ### Структура данных
 
@@ -193,12 +191,12 @@
 
 ## Диспетчер URL
 
-   1. **Главная:** ``localhost/``
-   2. **Просмотр архива броней за месяц:** ``localhost/application/archive/<int:year>/<int:month>``
-   3. **Просмотр архива броней за год:** ``localhost/application/archive/<int:year>``
-   4. **Просмотр архива броней за все время:** ``localhost/application/archive/``
-   5. **Просмотр архива по пользователю:** ``localhost/organizer/<int:id>/events/``
-   6. **Отображение заявки:** ``localhost/application/<int:id>``
+1.  **Главная:** `localhost/`
+2.  **Просмотр архива броней за месяц:** `localhost/application/archive/<int:year>/<int:month>`
+3.  **Просмотр архива броней за год:** `localhost/application/archive/<int:year>`
+4.  **Просмотр архива броней за все время:** `localhost/application/archive/`
+5.  **Просмотр архива по пользователю:** `localhost/organizer/<int:id>/events/`
+6.  **Отображение заявки:** `localhost/application/<int:id>`
 
 ---
 
@@ -235,11 +233,11 @@ python manage.py loaddata dump.json
 ## Ссылки на полезные материалы
 
 1. Django:
+
    - [Начало работы c Django](https://django.fun/docs/django/5.2/intro/tutorial02/)
    - [AdminSite объекты Django](https://django.fun/docs/django/5.2/ref/contrib/admin/#django.contrib.admin.AdminSite)
 
 2. Дополнительно:
    - [List of tz database time zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
    - [Python Дайджест: как актуализировать всю кодовую базу с помощью pre-commit](https://habr.com/ru/companies/first/articles/721732/)
-
-
+   - [Скрипты Git hook | pre-commit](https://www.atlassian.com/ru/git/tutorials/git-hooks)
