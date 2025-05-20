@@ -235,6 +235,11 @@ python manage.py loaddata dump.json
 ## Ссылки на полезные материалы
 
 1. Django:
-   - https://django.fun/docs/django/5.2/intro/tutorial02/
+   - [Начало работы c Django](https://django.fun/docs/django/5.2/intro/tutorial02/)
+   - [AdminSite объекты Django](https://django.fun/docs/django/5.2/ref/contrib/admin/#django.contrib.admin.AdminSite)
+
 2. Дополнительно:
-   - https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+   - [List of tz database time zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
+   - [Python Дайджест: как актуализировать всю кодовую базу с помощью pre-commit](https://habr.com/ru/companies/first/articles/721732/)
+
+
