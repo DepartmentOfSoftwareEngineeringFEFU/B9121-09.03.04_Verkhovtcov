@@ -35,7 +35,7 @@ python manage.py runserver 192.168.1.37:8050 --insecure
 python manage.py runserver 0.0.0.0:8050 --insecure
 ```
 
-Локальный IP-адресс можно узнать через команду ipconfig
+Локальный IP-адрес можно узнать через команду ipconfig
 
 
 ### Дамп и загрузка данных
@@ -50,4 +50,19 @@ python manage.py dumpdata --natural-foreign --natural-primary -e contenttypes -e
 
 ```bash
 python manage.py loaddata dump.json
+```
+
+### Pre-Commit
+Этот хук можно использовать для проверки отправляемого снимка состояния. К примеру, он позволяет запустить автоматическое тестирование и проверить, не нарушит ли коммит работу существующих функций. Скрипт pre-commit не принимает аргументов, а ненулевое состояние выхода приведет к отмене всего коммита.
+
+```base
+pre-commit clean
+```
+
+```base
+pre-commit install
+```
+
+```base
+pre-commit run --all-files
 ```

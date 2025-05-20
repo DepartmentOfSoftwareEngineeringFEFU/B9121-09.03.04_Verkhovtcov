@@ -32,7 +32,7 @@
                         {% elif item.new_status.status == 'Не согласовано' %}bg-danger
                         {% elif item.new_status.status == 'Направлена на доработку' %}bg-warning
                         {% else %}bg-secondary{% endif %}">
-                        {{ item.new_status }}
+                        {{ item.new_status.status }}
                     </span>
                 </td>
                 <td>

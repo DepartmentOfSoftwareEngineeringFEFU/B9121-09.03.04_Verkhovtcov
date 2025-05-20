@@ -1,4 +1,4 @@
-from CogSolver.models import Rule
+from CogSolver.models import ClassificationSettings, Rule
 from django.contrib import admin
 from django.urls import path
 
@@ -60,3 +60,12 @@ class RuleAdmin(admin.ModelAdmin):
             ),
         ]
         return custom_urls + urls
+
+    @admin.register(ClassificationSettings)
+    class ClassificationSettingsAdmin(admin.ModelAdmin):
+        list_display = ('change_status_on_classify',)
+        fields = ('change_status_on_classify',)
+
+        def has_add_permission(self, request):
+            # Разрешаем только одну запись настроек
+            return not ClassificationSettings.objects.exists()
