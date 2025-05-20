@@ -229,14 +229,20 @@ class RuleEngine:
     def apply_rules_to_application(
         application,
     ):
+        settings = ClassificationSettings.objects.first()
+        change_status = (
+            settings.change_status_on_classify if settings else True
+        )
+
         rules = Rule.objects.filter(is_active=True).order_by("-priority")
 
         for rule in rules:
             try:
                 if rule.evaluate(application):
                     # Возвращаем новый статус и обновляем заявку
-                    application.status = rule.new_status
-                    application.save()
+                    if change_status:
+                        application.status = rule.new_status
+                        application.save()
                     return rule.new_status
 
             except Exception as e:
@@ -267,3 +273,16 @@ class RuleEngine:
             )
 
         return results
+
+
+class ClassificationSettings(models.Model):
+    change_status_on_classify = models.BooleanField(
+        default=True, verbose_name="Изменять статус при классификации"
+    )
+
+    class Meta:
+        verbose_name = "Настройка классификации"
+        verbose_name_plural = "Настройки классификации"
+
+    def __str__(self):
+        return "Настройки автоматической классификации"
