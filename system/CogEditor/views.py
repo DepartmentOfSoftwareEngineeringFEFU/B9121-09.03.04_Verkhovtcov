@@ -2,6 +2,7 @@ from CogEditor.forms import ApplicationForm
 from CogEditor.models import Application, StructuralUnit
 from django.views import generic
 from django.views.generic.edit import CreateView
+from django.shortcuts import render
 
 
 class IndexView(generic.ListView):
@@ -123,3 +124,12 @@ class ApplicationCreateView(CreateView):
             }
         )
         return kwargs
+
+
+def personal(request):
+    template = 'CogEditor/personal-data-consent.html'
+    referer = request.META.get(
+        'HTTP_REFERER', '/'
+    )  # Получаем URL предыдущей страницы или корень сайта по умолчанию
+
+    return render(request, template, {'referer': referer})

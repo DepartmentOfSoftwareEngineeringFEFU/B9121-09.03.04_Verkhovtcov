@@ -1,3 +1,48 @@
-<footer class="border-top text-center py-3">
-  <p>© Департамент инновационных проектов ДВФУ</p>    
+<footer class="bg-light">
+  <div class="container py-4">
+    <div class="row">
+      <!-- Левая колонка -->
+      <div class="col-md-6 text-start">
+        <ul class="list-unstyled">
+          <li class="mb-2"><a href="https://www.dvfu.ru/upload/medialibrary/3f6/%D0%9F%D0%BE%D0%BB%D0%B8%D1%82%D0%B8%D0%BA%D0%B0%20%D0%BE%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B8%20%D0%BF%D0%B5%D1%80%D1%81%D0%BE%D0%BD%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D1%85%20%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85%20%D0%B2%20%D0%94%D0%92%D0%A4%D0%A3.pdf" class="text-decoration-none text-dark">Политика обработки персональных данных</a></li>
+          <li><a href="{% url 'CogEditor:personal-data-consent' %}" class="text-decoration-none text-dark">Согласие на обработку персональных данных для сайта</a></li>
+        </ul>
+      </div>
+      
+      <!-- Правая колонка -->
+      <div class="col-md-6 text-end">
+        <ul class="list-unstyled">
+          <li class="mb-2">
+            <a href="mailto:dip@dvfu.ru" class="text-decoration-none text-dark">
+              <i class="bi bi-envelope me-2"></i>dip@dvfu.ru
+            </a>
+          </li>
+          <li class="mb-2">
+            <a href="tel:+74232652424,1072" class="text-decoration-none text-dark">
+              <i class="bi bi-telephone me-2"></i>8 (423) 265 24 24,1072
+            </a>
+          </li>
+          <li>
+            <a href="https://t.me/vdox18" target="_blank" class="text-decoration-none text-dark">
+              <i class="bi bi-telegram me-2"></i>@vdox18
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    
+    <!-- Разделительная полоса -->
+    <hr class="my-4">
+    
+    <!-- Нижняя часть футера -->
+    <div class="row">
+      <div class="col-12 text-center">
+        <p class="mb-2">© Департамент инновационных проектов ДВФУ, 2025</p>
+        <p class="small text-muted">
+          Информация, размещенная на данном сайте, является собственностью ДВФУ.<br>
+          Любое копирование материалов сайта без разрешения владельца запрещено.
+        </p>
+      </div>
+    </div>
+  </div>
 </footer>

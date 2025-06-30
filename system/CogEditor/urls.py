@@ -31,4 +31,9 @@ urlpatterns = [
         views.ApplicationCreateView.as_view(),
         name="application_classifier",
     ),
+    path(
+        "personal-data-consent/",
+        views.personal,
+        name="personal-data-consent",
+    ),
 ]
