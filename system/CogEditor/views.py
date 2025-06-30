@@ -1,5 +1,6 @@
 from CogEditor.forms import ApplicationForm
 from CogEditor.models import Application, StructuralUnit
+from django.shortcuts import render
 from django.views import generic
 from django.views.generic.edit import CreateView
 
@@ -10,7 +11,8 @@ class IndexView(generic.ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        """Возвращает 5 последних заявок"""
+        # TODO - исправить
+        """Возвращает 5 ближайших мероприятий"""
         return Application.objects.order_by("-subm_date")[:5]
 
 
@@ -97,7 +99,7 @@ class ApplicationCreateView(CreateView):
     model = Application
     form_class = ApplicationForm
     template_name = 'CogEditor/application_classifier.html'
-    success_url = '/solver/'
+    success_url = '/'
 
     def get_form_kwargs(self):
         """Добавляем default значения в форму"""
@@ -123,3 +125,12 @@ class ApplicationCreateView(CreateView):
             }
         )
         return kwargs
+
+
+def personal(request):
+    template = 'CogEditor/personal-data-consent.html'
+    referer = request.META.get(
+        'HTTP_REFERER', '/'
+    )  # Получаем URL предыдущей страницы или корень сайта по умолчанию
+
+    return render(request, template, {'referer': referer})

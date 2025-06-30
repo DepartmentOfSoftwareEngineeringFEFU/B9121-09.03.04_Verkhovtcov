@@ -1,0 +1,26 @@
+<!-- Модальное окно для ввода кода -->
+<div class="modal fade" id="codeModal" tabindex="-1" aria-labelledby="codeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="codeModalLabel">Подтверждение кода</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="codeForm">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="codeInput" class="form-label">Введите 4-значный код из Telegram</label>
+                        <input type="text" class="form-control" id="codeInput" name="code"
+                            pattern="[0-9]{4}" required>
+                        <div class="invalid-feedback" id="codeError"></div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                <button type="button" id="submitCodeBtn" class="btn btn-primary">Отправить</button>
+            </div>
+        </div>
+    </div>
+</div>

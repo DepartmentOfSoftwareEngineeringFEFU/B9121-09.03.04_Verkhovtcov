@@ -1,0 +1,124 @@
+<div class="modal fade" id="phoneModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Подтверждение телефона</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            
+            {% if not request.session.verification_phone %}
+            <!-- Форма ввода телефона -->
+            <form method="post" id="phoneForm" action="{% url 'Telegram:check_phone' %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Номер телефона</label>
+                        <input type="tel" 
+                            class="form-control" 
+                            name="phone" 
+                            placeholder="9XXXXXXXXX"
+                            pattern="9[0-9]{9}" 
+                            title="Введите 10 цифр, начиная с 9"
+                            required>
+                        <div class="invalid-feedback" id="phoneError"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-primary">Отправить код</button>
+                </div>
+            </form>
+
+            <script>
+                document.getElementById('phoneForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const form = e.target;
+                    const formData = new FormData(form);
+                    
+                    fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'active') {
+                            // Переключаем на форму ввода кода
+                            window.location.reload(); // или другая логика
+                        } else {
+                            document.getElementById('phoneError').textContent = data.message;
+                            if (data.status === 'not_found') {
+                                // Показываем кнопку бота
+                                const botSection = `
+                                    <div class="alert alert-warning mt-3">
+                                        <p>${data.message}</p>
+                                        <a href="${data.bot_url}" target="_blank" 
+                                        class="btn btn-sm btn-primary">
+                                            <i class="bi bi-telegram me-1"></i> Открыть бота
+                                        </a>
+                                    </div>`;
+                                form.querySelector('.modal-body').insertAdjacentHTML('beforeend', botSection);
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                });
+            </script>
+
+            {% else %}
+            <!-- Форма ввода кода -->
+            <form method="post" action="{% url 'Telegram:check_code' %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Код из Telegram</label>
+                        <input type="text" class="form-control" name="code" 
+                            pattern="[0-9]{4}" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="submit" name="submit_code" class="btn btn-primary">Подтвердить</button>
+                </div>
+            </form>
+
+            <script>
+                document.querySelector('form[action="{% url 'Telegram:check_code' %}"]').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const form = e.target;
+                    const formData = new FormData(form);
+                    
+                    fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            // Перенаправление на новую страницу
+                            window.location.href = "{% url 'CogEditor:index' %}";  // Укажите ваш URL
+                        } else {
+                            // Показываем ошибку в модальном окне
+                            const errorElement = document.createElement('div');
+                            errorElement.className = 'alert alert-danger mt-3';
+                            errorElement.textContent = data.message;
+                            form.querySelector('.modal-body').appendChild(errorElement);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                });
+            </script>
+            {% endif %}
+        </div>
+    </div>
+</div>
