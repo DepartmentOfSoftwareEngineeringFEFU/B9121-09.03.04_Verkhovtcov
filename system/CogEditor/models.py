@@ -347,8 +347,11 @@ class Application(models.Model):
         null=True, blank=True, verbose_name="Дата обучения работе со звуком"
     )
 
-    technical_requirements = models.TextField(
-        blank=True, null=True, verbose_name="Технические требования"
+    technical_requirements = models.CharField(
+        max_length=256,
+        blank=True,
+        null=True,
+        verbose_name="Технические требования",
     )
 
     status = models.ForeignKey(

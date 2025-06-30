@@ -6,9 +6,10 @@ class TelegramChat(models.Model):
         verbose_name="Номер телефона",
         blank=None,
         null=None,
+        unique=True,
     )
 
-    telegram_chat_id = models.CharField(
+    telegram_chat = models.CharField(
         verbose_name="ID чата telegram",
         blank=None,
         null=None,
