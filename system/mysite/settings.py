@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "CogEditor.apps.CogeditorConfig",
     "CogSolver.apps.CogsolverConfig",
     "CogNeural.apps.CogneuralConfig",
+    "Telegram.apps.TelegramConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
