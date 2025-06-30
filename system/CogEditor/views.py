@@ -1,8 +1,8 @@
 from CogEditor.forms import ApplicationForm
 from CogEditor.models import Application, StructuralUnit
+from django.shortcuts import render
 from django.views import generic
 from django.views.generic.edit import CreateView
-from django.shortcuts import render
 
 
 class IndexView(generic.ListView):
@@ -11,7 +11,8 @@ class IndexView(generic.ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        """Возвращает 5 последних заявок"""
+        # TODO - исправить
+        """Возвращает 5 ближайших мероприятий"""
         return Application.objects.order_by("-subm_date")[:5]
 
 
