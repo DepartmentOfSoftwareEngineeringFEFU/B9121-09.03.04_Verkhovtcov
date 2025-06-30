@@ -207,7 +207,30 @@
 После установки проекта должна получиться такая структура файлов:
 
 ``` tree
-
+Dev
+ └── methods-of-software-intellectualization/
+     ├── .vscode/    Служебная папка редактора кода (опционально, скрытая)
+     ├── .git/       Служебная информация Git (скрытая)
+     ├── .venv/              Директория виртуального окружения
+     ├── docs
+     │   └── requirements.txt          Список зависимостей проекта
+     ├── system              Директория проекта
+     │   ├── CogEditor/
+     │   ├── CogNeural/
+     │   ├── CogSolver/
+     │   ├── mysite/
+     │   ├── static/                   Папка со статическими файлами Django
+     │   ├── templates/                Папка с шаблонами Django
+     │   ├── db.sqlite3                Файл базы данных (может и не быть)
+     │   └── manage.py
+     ├── .flake8                    Настройки тестов (скрытый) 
+     ├── .gitignore                 Список файлов и папок, скрытых от отслеживания Git (скрытый)
+     ├── .pre-commit-config.yaml    Конфигурация Git Хука pre-commit
+     ├── db.json                <-- Загрузите фикстуры для базы данных    
+     ├── LICENSE                    Лицензия   
+     ├── pyproject.toml             Файл с настройками для pre-commit
+     ├── pytest.ini                 Конфигурация тестов
+     └── README.md              
 ```
 
 ```bash
