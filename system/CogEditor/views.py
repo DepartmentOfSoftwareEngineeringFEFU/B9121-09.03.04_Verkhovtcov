@@ -97,7 +97,7 @@ class ApplicationCreateView(CreateView):
     model = Application
     form_class = ApplicationForm
     template_name = 'CogEditor/application_classifier.html'
-    success_url = '/solver/'
+    success_url = '/'
 
     def get_form_kwargs(self):
         """Добавляем default значения в форму"""
