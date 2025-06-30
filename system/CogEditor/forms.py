@@ -56,6 +56,8 @@ class ApplicationForm(forms.ModelForm):
             attrs={
                 'class': 'form-control form-control-sm',
                 'type': 'date',
+                'value': day_1.date().strftime("%Y-%m-%d"),
+                'min': base_time.date().strftime("%Y-%m-%d"),
             }
         ),
         required=False,

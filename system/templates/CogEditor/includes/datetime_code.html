@@ -8,33 +8,33 @@
                 <h4 class="h6 mb-0">Даты бронирования</h4>
             </div>
             <div class="card-body">
+
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label for="{{ form.event_date.id_for_label }}">Дата</label>
+                            <!-- <label for="{{ form.event_date.id_for_label }}">Дата</label> -->
                             {{ form.event_date }}
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label for="{{ form.event_time_start.id_for_label }}">Начало</label>
+                            <!-- <label for="{{ form.event_time_start.id_for_label }}">Начало</label> -->
                             {{ form.event_time_start }}
-                        </div>
-                    </div>
-                    <div id="end-date-container" style="display: none;">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="{{ form.event_date_end.id_for_label }}">Дата окончания</label>
-                                {{ form.event_date_end }}
-                            </div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label for="{{ form.event_time_end.id_for_label }}">Окончание</label>
+                            <!-- <label for="{{ form.event_time_end.id_for_label }}">Окончание</label> -->
                             {{ form.event_time_end }}
                         </div>
                     </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <!-- <label for="{{ form.event_time_end.id_for_label }}">Окончание</label> -->
+                            {{ form.event_date_end }}
+                        </div>
+                    </div>
+
                 </div>
 
                 <div class="row mt-2">
@@ -45,11 +45,6 @@
                                 Весь день
                             </label>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <button type="button" class="btn btn-sm btn-outline-primary">
-                            <i class="fas fa-plus"></i> Добавить день
-                        </button>
                     </div>
                 </div>
             </div>
@@ -86,8 +81,29 @@
     document.addEventListener('DOMContentLoaded', function () {
         // Обработка чекбокса "Весь день"
         const allDayCheckbox = document.getElementById('{{ form.event_all_day.id_for_label }}');
-        const timeStartInput = document.getElementById('{{ form.event_time_start.id_for_label }}');
-        const timeEndInput = document.getElementById('{{ form.event_time_end.id_for_label }}');
+        const timeStartInput = document.getElementById('{{ form.event_time_start.id_for_label }}').parentElement.parentElement;
+        const timeEndInput = document.getElementById('{{ form.event_time_end.id_for_label }}').parentElement.parentElement;
+        const dateEndInput = document.getElementById('{{ form.event_date_end.id_for_label }}').parentElement.parentElement
+        
+        dateEndInput.style.display = 'none';
+
+        allDayCheckbox.addEventListener('change', function () {
+            if (this.checked) {
+                timeStartInput.style.display = 'none';
+                timeEndInput.style.display = 'none';
+                dateEndInput.style.display = 'block';
+
+                timeStartInput.value = "00:00:00";
+                timeEndInput.value = "23:59:59";
+            } else {                
+                timeStartInput.style.display = 'block';
+                timeEndInput.style.display = 'block';
+                dateEndInput.style.display = 'none';
+
+            }
+        });
+
+
 
         document.getElementById('all_day_checkbox').addEventListener('change', function () {
             document.getElementById('end-date-container').style.display = this.checked ? 'block' : 'none';
@@ -101,18 +117,11 @@
                 timeStartInput.disabled = true;
                 timeEndInput.disabled = true;
             } else {
-                // timeStartInput.value = '12:00';
-                // timeEndInput.value = '15:00';
                 timeStartInput.disabled = false;
                 timeEndInput.disabled = false;
             }
         });
 
-        // Инициализация при загрузке
-        if (allDayCheckbox.checked) {
-            timeStartInput.disabled = true;
-            timeEndInput.disabled = true;
-        }
     });
 </script>
 <style>
