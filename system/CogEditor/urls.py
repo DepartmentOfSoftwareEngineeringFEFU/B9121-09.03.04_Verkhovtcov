@@ -36,4 +36,5 @@ urlpatterns = [
         views.personal,
         name="personal-data-consent",
     ),
+
 ]

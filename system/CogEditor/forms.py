@@ -270,5 +270,7 @@ class ApplicationForm(forms.ModelForm):
         if commit:
             instance.save()  # Сохраняем изменения
 
+        
+
         print(f"Заявка сохранена! ID: {instance.id}")
         return instance
