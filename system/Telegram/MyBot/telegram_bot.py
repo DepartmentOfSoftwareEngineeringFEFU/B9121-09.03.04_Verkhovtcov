@@ -15,7 +15,6 @@ from telegram.ext import (
     filters,
 )
 
-import requests
 from Telegram.models import TelegramChat
 
 logger = logging.getLogger(__name__)
