@@ -8,9 +8,9 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 {{ form.media }}
 
-<div class="container mt-4">
+<div class="container mt-2 mb-2">
     <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">
+        <div class="card-header bg-dark bg-gradient text-white">
             <h2 class="h5 mb-0">Форма подачи заявки на мероприятие</h2>
         </div>
         <div class="card-body">
@@ -65,11 +65,13 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6">
-                                {{ form.requires_technical_support|as_crispy_field }}
-                                {{ form.audio_training_date|as_crispy_field }}
+                                {{ form.technical_requirements|as_crispy_field }}
                             </div>
                             <div class="col-md-6">
-                                {{ form.technical_requirements|as_crispy_field }}
+                                                                {{ form.audio_training_date|as_crispy_field }}
+
+                                {{ form.requires_technical_support|as_crispy_field }}
+
                             </div>
                         </div>
                     </div>
@@ -81,18 +83,32 @@
                     <div class="col-md-6">{{ form.order|as_crispy_field }}</div>
                 </div>
 
-                <div class="d-flex justify-content-between">
-                    <button type="submit" class="btn btn-primary px-4">
+                                <!-- Кнопки формы -->
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="submit" name="submit_main_form" class="btn btn-primary px-4"
+                            {% if not request.session.phone_verified %}disabled{% endif %}>
                         <i class="bi bi-save me-2"></i>Сохранить заявку
                     </button>
-                    <a href="{% url 'CogSolver:rules_report' %}" class="btn btn-outline-secondary">
+                    
+                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" 
+                            data-bs-target="#phoneModal">
+                        <i class="bi bi-phone me-2"></i>Подтвердить телефон
+                    </button>
+                    
+                    <a href="{% url 'CogEditor:index' %}" class="btn btn-outline-secondary">
                         <i class="bi bi-arrow-left me-2"></i>Отмена
                     </a>
                 </div>
+
             </form>
         </div>
+
     </div>
 </div>
+
+        <!-- Модальное окно для ввода телефона -->
+        {% include 'CogEditor/includes/phone-modal.html' %}
+
 
 <style>
     /* Кастомные стили для формы */
@@ -181,4 +197,5 @@
         toggleFields(); // Инициализация при загрузке
     });
 </script>
+
 {% endblock %}
