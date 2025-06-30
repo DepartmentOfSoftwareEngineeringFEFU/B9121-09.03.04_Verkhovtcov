@@ -83,7 +83,7 @@
                     <div class="col-md-6">{{ form.order|as_crispy_field }}</div>
                 </div>
 
-                                <!-- Кнопки формы -->
+                <!-- Кнопки формы -->
                 <div class="d-flex justify-content-between mt-4">
                     <button type="submit" name="submit_main_form" class="btn btn-primary px-4"
                             {% if not request.session.phone_verified %}disabled{% endif %}>
@@ -91,8 +91,10 @@
                     </button>
                     
                     <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" 
-                            data-bs-target="#phoneModal">
-                        <i class="bi bi-phone me-2"></i>Подтвердить телефон
+                            data-bs-target="#phoneModal" id="confirmPhone">
+                        <i class="bi bi-phone me-2"
+                        {% if request.session.phone_verified %}disabled{% endif %}
+                        ></i>Подтвердить телефон
                     </button>
                     
                     <a href="{% url 'CogEditor:index' %}" class="btn btn-outline-secondary">
