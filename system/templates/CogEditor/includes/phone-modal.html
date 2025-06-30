@@ -5,6 +5,7 @@
                 <h5 class="modal-title">Подтверждение телефона</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+        
             
             {% if not request.session.verification_phone %}
             <!-- Форма ввода телефона -->
@@ -61,6 +62,9 @@
                                     </div>`;
                                 form.querySelector('.modal-body').insertAdjacentHTML('beforeend', botSection);
                             }
+                            else if(data.status === 'error') {
+                                // TODO - Сообщаем пользователю об ошибке
+                            }
                         }
                     })
                     .catch(error => {
@@ -69,7 +73,8 @@
                 });
             </script>
 
-            {% else %}
+            {% elif not request.session.verification_code%}
+
             <!-- Форма ввода кода -->
             <form method="post" action="{% url 'Telegram:check_code' %}">
                 {% csrf_token %}
