@@ -5,5 +5,6 @@ urlpatterns = [
     path("", include("CogEditor.urls")),
     path("neural/", include("CogNeural.urls")),
     path("solver/", include("CogSolver.urls")),
+    path('telegram/', include("Telegram.urls")),
     path("admin/", admin.site.urls),
 ]
