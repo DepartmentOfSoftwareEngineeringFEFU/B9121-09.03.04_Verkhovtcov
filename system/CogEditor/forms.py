@@ -35,8 +35,8 @@ class ApplicationForm(forms.ModelForm):
     now = timezone.now()
     local_now = timezone.localtime(now)
     base_time = local_now.replace(minute=0, second=0, microsecond=0)
-    day_1 = base_time + datetime.timedelta(days=3, hours=1)
-    day_2 = base_time + datetime.timedelta(days=3, hours=4)
+    day_1 = base_time + datetime.timedelta(days=3, hours=0, minutes=30)
+    day_2 = base_time + datetime.timedelta(days=3, hours=1, minutes=30)
 
     event_date = forms.DateField(
         label="Дата мероприятия",
@@ -45,6 +45,7 @@ class ApplicationForm(forms.ModelForm):
                 'class': 'form-control form-control-sm',
                 'type': 'date',
                 'value': day_1.date().strftime("%Y-%m-%d"),
+                'min': base_time.date().strftime("%Y-%m-%d"),
             }
         ),
         initial=day_1.date().strftime("%Y-%m-%d"),
@@ -269,8 +270,6 @@ class ApplicationForm(forms.ModelForm):
 
         if commit:
             instance.save()  # Сохраняем изменения
-
-        
 
         print(f"Заявка сохранена! ID: {instance.id}")
         return instance
