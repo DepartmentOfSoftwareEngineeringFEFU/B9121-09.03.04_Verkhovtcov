@@ -31,5 +31,14 @@ services:
     environment:
       - REDIS_URL=redis://redis:6379/0
 
+  celery:
+    build: .
+    command: celery -A your_project worker --loglevel=info
+    depends_on:
+      - redis
+    environment:
+      - DJANGO_SETTINGS_MODULE=your_project.settings
+
+
 volumes:
   redis_data:
