@@ -1,5 +1,10 @@
 import logging
 from random import randint
+from celery import shared_task
+from celery.utils.log import get_task_logger
+from telegram import Bot
+from telegram.error import TelegramError
+
 
 from asgiref.sync import sync_to_async
 from colorama import Back, Fore, Style, init
@@ -51,6 +56,45 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             f"Error when user_id:{user_id} start @AutoBookingPlacesBot\n"
             f"Error message: {str(ex)}"
         )
+
+
+@shared_task(bind=True, max_retries=3)
+def send_verification_code(self, telegram_chat_id):
+    try:
+        # Получаем чат (синхронный запрос в асинхронной задаче)
+        chat = TelegramChat.objects.get(telegram_chat=str(telegram_chat_id))
+
+        # Генерируем код
+        code = randint(1000, 9999)
+
+        # Отправляем сообщение через бота
+        bot = Bot(token=os.getenv('TELEGRAM_BOT_TOKEN'))
+
+        # Используем sync_to_async для асинхронной отправки
+        sync_to_async(bot.send_message)(
+            chat_id=telegram_chat_id,
+            text=f"Ваш код подтверждения: {code}\n"
+            "Введите его на сайте для отправки заявки на бронирование.",
+        )
+
+        # Сохраняем код в кеш (5 минут)
+        from django.core.cache import cache
+
+        cache.set(f'verify_{chat.phone}', code, timeout=300)
+
+        logger.info(f"Sent verification code {code} to {telegram_chat_id}")
+
+    except TelegramChat.DoesNotExist as ex:
+        logger.error(f"Chat {telegram_chat_id} not found: {str(ex)}")
+        raise self.retry(exc=ex, countdown=60)
+
+    except TelegramError as ex:
+        logger.error(f"Telegram error: {str(ex)}")
+        raise self.retry(exc=ex, countdown=60)
+
+    except Exception as ex:
+        logger.error(f"Unexpected error: {str(ex)}")
+        raise self.retry(exc=ex, countdown=60)
 
 
 async def handle_existing_user(

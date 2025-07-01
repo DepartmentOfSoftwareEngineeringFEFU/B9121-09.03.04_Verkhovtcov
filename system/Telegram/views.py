@@ -6,8 +6,10 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.http import require_POST
-
+from Telegram.telegram_bot import handle_existing_user
 from .models import TelegramChat
+from Telegram.telegram_bot import send_verification_code
+
 
 init()  # Инициализация colorama
 
@@ -44,8 +46,15 @@ def check_phone(request):
         if chat is None:
             raise TelegramChat.DoesNotExist
 
-        print(chat.telegram_chat)
+        # Устанавливаем сессию и её время жизни (5 минута)
         request.session['verification_phone'] = chat.phone
+        request.session.set_expiry(300)  # 60 секунд = 1 минута
+
+        # Хоть Чусов один из лучших преподов ДВФУ, этот код был сгенерирован нейросетью)))
+        # Создаем mock-объекты Update и Context для вызова handle_existing_user
+
+        send_verification_code.delay(int(chat.telegram_chat))
+
         return JsonResponse(
             {'status': 'active', 'chat_id': chat.telegram_chat}
         )
@@ -61,7 +70,7 @@ def check_phone(request):
         )
 
     except Exception as ex:
-        print(ex)
+        logger.error(f"Error in check_phone: {ex}")
         return JsonResponse(
             {
                 'status': 'error',
@@ -95,9 +104,13 @@ def check_code(request):
             status=400,
         )
 
-    if code == cached_code:
         # Код верный
+    if code == cached_code:
+
+        # Устанавливаем сессию и её время жизни (7 минута)
         request.session['phone_verified'] = True
+        request.session.set_expiry(60 * 7)  # 60 секунд = 1 минута
+
         cache.delete(f'verify_{phone}')  # Удаляем использованный код
 
         return JsonResponse(
