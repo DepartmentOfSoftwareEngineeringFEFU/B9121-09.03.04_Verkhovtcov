@@ -5,7 +5,7 @@ from celery.utils.log import get_task_logger
 from telegram import Bot
 from telegram.error import TelegramError
 
-
+import os
 from asgiref.sync import sync_to_async
 from colorama import Back, Fore, Style, init
 from django.core.cache import cache
@@ -62,6 +62,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 def send_verification_code(self, telegram_chat_id):
     try:
         # Получаем чат (синхронный запрос в асинхронной задаче)
+        logger.debug(f"1.2: {telegram_chat_id}")
         chat = TelegramChat.objects.get(telegram_chat=str(telegram_chat_id))
 
         # Генерируем код
@@ -167,7 +168,7 @@ async def request_phone_number(update: Update) -> None:
 
 def main():
     token = os.getenv("TOKEN_TELEGRAM_BOT")
-
+    print(token)
     application = Application.builder().token(token).build()
 
     application.add_handler(CommandHandler("start", start))
@@ -177,7 +178,6 @@ def main():
 
 
 if __name__ == '__main__':
-    import os
 
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mysite.settings')
     import django

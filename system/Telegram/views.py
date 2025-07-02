@@ -52,8 +52,10 @@ def check_phone(request):
 
         # Хоть Чусов один из лучших преподов ДВФУ, этот код был сгенерирован нейросетью)))
         # Создаем mock-объекты Update и Context для вызова handle_existing_user
-
-        send_verification_code.delay(int(chat.telegram_chat))
+        logger.debug(f"1: {int(chat.telegram_chat)}")
+        # send_verification_code.delay(telegram_chat_id=int(chat.telegram_chat))
+        logger.debug("2")
+        cache.set(f'verify_{chat.phone}', 1111, timeout=300)
 
         return JsonResponse(
             {'status': 'active', 'chat_id': chat.telegram_chat}

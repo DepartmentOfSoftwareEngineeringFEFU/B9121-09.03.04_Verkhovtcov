@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Главная{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pages/home.css' %}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"/>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+<script src="{% static 'js/home.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<!-- Блок 1 - Герой с изображениями -->
+<section id="block1" class="hero-block">
+    {% include "components/hero.html" %}
+</section>
+
+<!-- Блок 2 - О коворкинге + слайдер -->
+<section id="block2" class="about-block">
+    <div class="container container-color-white container-shadow">
+        <div class="rotated-rectangle">
+        </div>
+        <div class="sub-container">
+            <h2 class="section-title">О молодёжном коворкинге</h2>
+            <p class="about-text">
+                Коворкинг — это собственный Рабочий опенспейс на 40 мест в главном корпусе самого современного кампуса
+                России с быстрым, как скорость света Wi-Fi, всей необходимой оргтехникой и оборудованием для проведения
+                презентаций. В коворкинге есть пространство для мероприятий до 30 человек, проектор, экран, и всё, что
+                может
+                понадобится для проведения презентаций, образовательных мероприятий, тимбилдингов, съёмок и других не
+                менее
+                полезных собраний. А еще работа в нашем коворкинге — лучший способ влиться в стартаперское сообщество
+                Владивостока.
+            </p>
+
+            <style>
+
+            </style>
+
+
+            <!-- Слайдер -->
+            <div class="swiper mySwiper swiper-slide-shadow">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <img src="{% static 'img/slider1.jpg' %}" alt="Коворкинг пространство">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="{% static 'img/slider2.jpg' %}" alt="Мероприятие в коворкинге">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="{% static 'img/slider3.jpg' %}" alt="Рабочая зона">
+                    </div>
+                </div>
+                <div class="swiper-pagination"></div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+
+        </div>
+
+
+    </div>
+</section>
+
+<!-- Блок 3 - ЧАВО + календарь -->
+<section id="block3" class="faq-events-block">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <h2 class="section-title">Часто задаваемые вопросы</h2>
+                {% include "components/faq.html" %}
+            </div>
+            <div class="col-lg-6">
+                <h2 class="section-title">Календарь событий</h2>
+                {% include "components/calendar.html" %}
+
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
